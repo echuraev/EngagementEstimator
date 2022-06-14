@@ -3,6 +3,10 @@
 
 #include <QLocale>
 #include <QTranslator>
+#include <QQuickView>
+#include <QQmlContext>
+
+#include "screencapture.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,6 +14,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
+
+    qmlRegisterType<ScreenCapture>("screenCapture", 1, 0, "ScreenCapture");
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -30,5 +36,13 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+
+    ScreenCapture screenCapture;
+    QQmlContext *context = engine.rootContext();
+    context->setContextProperty("screenCapture", &screenCapture);
+    /*QQuickView view(&engine, 0);
+    ScreenCapture screenClass(&view);
+    view.rootContext()->setContextProperty("screenObject", &screenClass);
+*/
     return app.exec();
 }
