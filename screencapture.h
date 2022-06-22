@@ -5,8 +5,9 @@
 #include <QPixmap>
 //#include <QWidget>
 
-/*class QString;
 class QQuickView;
+/*class QString;
+
 */
 class ScreenCapture : public QObject
 {
@@ -15,14 +16,14 @@ public:
     explicit ScreenCapture(QObject *parent = nullptr);
 
 public slots:
-    void capture();
+    void capture(int x, int y, int width, int height, int frameRate);
 
 signals:
     void displayScreenshot(const QPixmap& img);
 
 
 private:
-    QPixmap originalPixmap;
+    //QPixmap originalPixmap;
     //QQuickView *m_currentView;
 };
 

@@ -12,21 +12,15 @@ ScreenCapture::ScreenCapture(QObject *parent)
 {
 }
 
-void ScreenCapture::capture()
+void ScreenCapture::capture(int x, int y, int width, int height, int frameRate)
 {
-    qDebug() << "In capture:";
-    QScreen *screen = QGuiApplication::primaryScreen();
-    /*if (const QWindow *window = windowHandle())
-        screen = window->screen();*/
+    qDebug() << "In capture: x: " << x << ", y: " << y << ", width: " << width << ", height: " << height;
+    QPoint point(x, y);
+    QScreen *screen = QGuiApplication::screenAt(point);
     if (!screen) {
         qDebug() << " if (!screen) {";
         return;
     }
-    auto originalPixmap = screen->grabWindow(0);
-    originalPixmap.save("tmp.jpg");
-
-    emit displayScreenshot(originalPixmap);
-    /*QImage image = m_currentView->grabWindow();
-    // QPixmap::grabWidget(m_currentView).save(path);
-    image.save(path);*/
+    auto originalPixmap = screen->grabWindow(0, x, y, width, height);
+    originalPixmap.save("/Users/echuraev/tmp.jpg");
 }

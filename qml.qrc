@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Style.qml</file>
+        <file>ScreenAreaSelector.qml</file>
+        <file>Controls.qml</file>
     </qresource>
 </RCC>
