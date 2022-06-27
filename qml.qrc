@@ -4,5 +4,6 @@
         <file>Style.qml</file>
         <file>ScreenAreaSelector.qml</file>
         <file>Controls.qml</file>
+        <file>qmldir</file>
     </qresource>
 </RCC>

@@ -1,26 +1,23 @@
 #include "screencapture.h"
 
-#include <QPixmap>
 #include <QQuickView>
-#include <QString>
 #include <QGuiApplication>
 
 #include <QDebug>
 
-ScreenCapture::ScreenCapture(QObject *parent)
-    : QObject(parent)
+ScreenCapture::ScreenCapture()
 {
 }
 
-void ScreenCapture::capture(int x, int y, int width, int height, int frameRate)
+QPixmap ScreenCapture::capture(int x, int y, int width, int height)
 {
+    static int counter = 0;
+    counter++;
     qDebug() << "In capture: x: " << x << ", y: " << y << ", width: " << width << ", height: " << height;
     QPoint point(x, y);
     QScreen *screen = QGuiApplication::screenAt(point);
     if (!screen) {
-        qDebug() << " if (!screen) {";
-        return;
+        throw std::runtime_error("Cannot get a QScreen for capturing");
     }
-    auto originalPixmap = screen->grabWindow(0, x, y, width, height);
-    originalPixmap.save("/Users/echuraev/tmp.jpg");
+    return screen->grabWindow(0, x, y, width, height);
 }

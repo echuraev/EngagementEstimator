@@ -5,6 +5,7 @@ QT += quick
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        involvementestimator.cpp \
         main.cpp \
         screencapture.cpp
 
@@ -27,4 +28,16 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    involvementestimator.h \
     screencapture.h
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../OctoML/tvm/cmake-build-Debug/release/ -ltvm_runtime
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../OctoML/tvm/cmake-build-Debug/debug/ -ltvm_runtime
+else:unix: LIBS += -L$$PWD/../../../OctoML/tvm/cmake-build-Debug/ -ltvm_runtime
+
+INCLUDEPATH += $$PWD/../../../OctoML/tvm/include
+DEPENDPATH += $$PWD/../../../OctoML/tvm/include
+INCLUDEPATH += $$PWD/../../../OctoML/tvm/3rdparty/dmlc-core/include/
+DEPENDPATH += $$PWD/../../../OctoML/tvm/3rdparty/dmlc-core/include/
+INCLUDEPATH += $$PWD/../../../OctoML/tvm/3rdparty/dlpack/include
+DEPENDPATH += $$PWD/../../../OctoML/tvm/3rdparty/dlpack/include

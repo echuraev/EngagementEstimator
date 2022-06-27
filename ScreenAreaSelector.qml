@@ -13,6 +13,7 @@ Window {
     // Declare properties that will store the position of the mouse cursor
     property int previousX
     property int previousY
+    property var controlWindow
     readonly property int moveZoneSize: 5
     readonly property int minWidth: 200
     readonly property int minHeight: 200
@@ -21,8 +22,8 @@ Window {
         x = Screen.width / 2 - width / 2
         y = Screen.height / 2 - height / 2
         var component = Qt.createComponent("Controls.qml")
-        var window = component.createObject(this)
-        window.show()
+        controlWindow = component.createObject(this)
+        controlWindow.show()
     }
 
     Canvas {
@@ -60,7 +61,6 @@ Window {
             previousX = mouseX
         }
 
-        // When changing a position, we recalculate the position of the window, and its height
         onMouseYChanged: {
             var dy = mouseY - previousY
             screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
@@ -71,6 +71,12 @@ Window {
             var dx = mouseX - previousX
             screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
             screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
+        }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
         }
     }
 
@@ -102,6 +108,12 @@ Window {
             var dx = mouseX - previousX
             screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
         }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
+        }
     }
 
     MouseArea {
@@ -130,6 +142,12 @@ Window {
         onMouseXChanged: {
             var dx = mouseX - previousX
             screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+        }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
         }
     }
 
@@ -161,6 +179,12 @@ Window {
             screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
             screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
         }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
+        }
     }
 
     MouseArea {
@@ -185,6 +209,12 @@ Window {
             screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
             screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
         }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
+        }
     }
 
     // Similar calculations for the remaining three areas of resize
@@ -205,6 +235,12 @@ Window {
         onMouseYChanged: {
             var dy = mouseY - previousY
             screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
+        }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
         }
     }
 
@@ -227,6 +263,12 @@ Window {
             screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
             screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
         }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
+        }
     }
 
     MouseArea {
@@ -246,6 +288,12 @@ Window {
         onMouseXChanged: {
             var dx = mouseX - previousX
             screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+        }
+
+        onReleased: {
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
         }
     }
 
@@ -279,8 +327,9 @@ Window {
         }
 
         onReleased: {
-            console.log("Released");
-            //controlsWindow.requestActivate();
+            // Hack for creating controlWindow always on top
+            controlWindow.visible = false
+            controlWindow.visible = true
         }
     }
 }

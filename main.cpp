@@ -6,7 +6,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 
-#include "screencapture.h"
+#include "involvementestimator.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 #endif
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<ScreenCapture>("screenCapture", 1, 0, "ScreenCapture");
+    qmlRegisterType<InvolvementEstimator>("involvementEstimator", 1, 0, "InvolvementEstimator");
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -37,12 +37,9 @@ int main(int argc, char *argv[])
     engine.load(url);
 
 
-    ScreenCapture screenCapture;
+    InvolvementEstimator estimator;
     QQmlContext *context = engine.rootContext();
-    context->setContextProperty("screenCapture", &screenCapture);
-    /*QQuickView view(&engine, 0);
-    ScreenCapture screenClass(&view);
-    view.rootContext()->setContextProperty("screenObject", &screenClass);
-*/
+    context->setContextProperty("involvementEstimator", &estimator);
+
     return app.exec();
 }
