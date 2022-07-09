@@ -1,14 +1,10 @@
 #include "involvementestimator.h"
+#include "modelexecutor.h"
 #include "screencapture.h"
 
 #include <QDebug>
 #include <QGuiApplication>
 #include <QPixmap>
-
-
-/*#include <tvm/runtime/module.h>
-#include <tvm/runtime/packed_func.h>
-#include <tvm/runtime/registry.h>*/
 
 InvolvementEstimator::InvolvementEstimator(QObject *parent)
     : QObject(parent)
@@ -21,10 +17,15 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
     counter++;
     try {
         auto pixmap = ScreenCapture::capture(x, y, width, height);
-        QString number;
+        ModelExecutor executor;
+        executor.loadModel("/Users/echuraev/Workspace/HSE/InvolvementEstimator/InvolvementEstimator/models/enet_b0_8_best_afew.so");
+        QPixmap face("/Users/echuraev/Workspace/HSE/InvolvementEstimator/InvolvementEstimator/models/face_224_224.png");
+        auto output = executor.run(face);
+        qDebug() << "Result: " << output.c_str();
+        /*QString number;
         number.setNum(counter);
         QString name = "/Users/echuraev/tmp/tmp" + number + ".jpg";
-        pixmap.save(name);
+        pixmap.save(name);*/
     } catch (...) {
     }
 }

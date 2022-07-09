@@ -7,6 +7,7 @@ QT += quick
 SOURCES += \
         involvementestimator.cpp \
         main.cpp \
+        modelexecutor.cpp \
         screencapture.cpp
 
 RESOURCES += qml.qrc
@@ -29,15 +30,23 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     involvementestimator.h \
+    modelexecutor.h \
     screencapture.h
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../OctoML/tvm/cmake-build-Debug/release/ -ltvm_runtime
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../OctoML/tvm/cmake-build-Debug/debug/ -ltvm_runtime
-else:unix: LIBS += -L$$PWD/../../../OctoML/tvm/cmake-build-Debug/ -ltvm_runtime
+TVM_BUILD_DIR = $$(TVM_BUILD_DIR)
+!isEmpty(TVM_BUILD_DIR) {
+    #win32:CONFIG(release, debug|release): LIBS += -L$${TVM_BUILD_DIR}/release/ -ltvm_runtime
+    #else:win32:CONFIG(debug, debug|release): LIBS += -L$${TVM_BUILD_DIR}/debug/ -ltvm_runtime
+    #else:unix: LIBS += -L$${TVM_BUILD_DIR}/ -ltvm_runtime
+    LIBS += -L$${TVM_BUILD_DIR}/ -ltvm_runtime
 
-INCLUDEPATH += $$PWD/../../../OctoML/tvm/include
-DEPENDPATH += $$PWD/../../../OctoML/tvm/include
-INCLUDEPATH += $$PWD/../../../OctoML/tvm/3rdparty/dmlc-core/include/
-DEPENDPATH += $$PWD/../../../OctoML/tvm/3rdparty/dmlc-core/include/
-INCLUDEPATH += $$PWD/../../../OctoML/tvm/3rdparty/dlpack/include
-DEPENDPATH += $$PWD/../../../OctoML/tvm/3rdparty/dlpack/include
+    INCLUDEPATH += $${TVM_BUILD_DIR}/../include
+    DEPENDPATH += $${TVM_BUILD_DIR}/../include
+    INCLUDEPATH += $${TVM_BUILD_DIR}/../3rdparty/dmlc-core/include/
+    DEPENDPATH += $${TVM_BUILD_DIR}/../3rdparty/dmlc-core/include/
+    INCLUDEPATH += $${TVM_BUILD_DIR}/../3rdparty/dlpack/include
+    DEPENDPATH += $${TVM_BUILD_DIR}/../3rdparty/dlpack/include
+}
+else {
+    error("Error! Environment variable TVM_HOME should be specified!")
+}

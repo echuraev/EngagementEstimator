@@ -5,8 +5,8 @@ import involvementEstimator 1.0
 
 Window {
     id: controlsWindow
-    width: 400
-    height: 50
+    width: 200
+    height: 30
     visible: true
     title: qsTr("Screen capture controls")
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint
