@@ -25,6 +25,8 @@ public:
     //void getOutput();
     std::string run(QPixmap input, DeviceType devType = DeviceType::CPU);
 private:
+    tvm::runtime::NDArray pyTorchPreprocess(QPixmap input);
+private:
     tvm::runtime::Module m_module;
 };
 
