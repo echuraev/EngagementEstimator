@@ -1,0 +1,3 @@
+[submodule "opencv-mtcnn"]
+	path = opencv-mtcnn
+	url = git@github.com:ksachdeva/opencv-mtcnn.git
