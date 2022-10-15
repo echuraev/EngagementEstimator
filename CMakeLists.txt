@@ -11,17 +11,17 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Widgets LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Widgets LinguistTools)
 
 set(TS_FILES InvolvementEstimator_ru_RU.ts)
 
 set(PROJECT_SOURCES
         enetb08bestafewwrapper.cpp
-        facedetectionwrapper.cpp
         involvementestimator.cpp
         main.cpp
         modelexecutor.cpp
+        mtcnnwrapper.cpp
         screencapture.cpp
         qml.qrc
         ${TS_FILES}
@@ -82,6 +82,7 @@ target_link_libraries(InvolvementEstimator
   PRIVATE
   Qt${QT_VERSION_MAJOR}::Core
   Qt${QT_VERSION_MAJOR}::Quick
+  Qt${QT_VERSION_MAJOR}::Widgets
   ${LIB_TVM}
   ${OpenCV_LIBS}
   mtcnn

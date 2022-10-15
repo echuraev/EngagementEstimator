@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 #include <QLocale>
@@ -13,9 +13,9 @@ int main(int argc, char *argv[])
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
-    qmlRegisterType<InvolvementEstimator>("involvementEstimator", 1, 0, "InvolvementEstimator");
+    qmlRegisterType<InvolvementEstimator>("ru.hse.involvementEstimator", 1, 0, "InvolvementEstimator");
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -35,11 +35,6 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-
-
-    InvolvementEstimator estimator;
-    QQmlContext *context = engine.rootContext();
-    context->setContextProperty("involvementEstimator", &estimator);
 
     return app.exec();
 }

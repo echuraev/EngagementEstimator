@@ -13,7 +13,6 @@ QPixmap ScreenCapture::capture(int x, int y, int width, int height)
 {
     static int counter = 0;
     counter++;
-    qDebug() << "In capture: x: " << x << ", y: " << y << ", width: " << width << ", height: " << height;
     QPoint point(x, y);
     QScreen *screen = QGuiApplication::screenAt(point);
     if (!screen) {
