@@ -16,6 +16,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Widgets Lingui
 
 set(TS_FILES InvolvementEstimator_ru_RU.ts)
 
+option(DEBUG_MOD "Build project in debug mode. Fix also in Style.qml" ON)
+
 set(PROJECT_SOURCES
         enetb08bestafewwrapper.cpp
         involvementestimator.cpp
@@ -88,6 +90,7 @@ target_link_libraries(InvolvementEstimator
   mtcnn
 )
 
+# TODO: Update MACOSX_BUNDLE_GUI_IDENTIFIER and check that screen capturer works
 set_target_properties(InvolvementEstimator PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

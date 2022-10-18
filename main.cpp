@@ -36,5 +36,10 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+
+    //InvolvementEstimator estimator;
+    //QQmlContext *context = engine.rootContext();
+    //context->setContextProperty("involvementEstimator", &estimator);
+
     return app.exec();
 }

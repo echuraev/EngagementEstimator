@@ -86,6 +86,11 @@ Window {
                 text: qsTr("Select area")
                 font.pixelSize: Style.fontSize
                 onClicked: {
+                    if (Style.debugMod) {
+                        console.log("WARNING!!!")
+                        console.log("You run application in debug mode")
+                        console.log("WARNING!!!")
+                    }
                     var component = Qt.createComponent("ScreenAreaSelector.qml")
                     var window = component.createObject(this)
                     window.show()

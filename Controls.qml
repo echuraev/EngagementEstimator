@@ -12,8 +12,8 @@ Window {
     height: 30
     visible: true
     title: qsTr("Screen capture controls")
-    //flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint
+    //flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground
     x: (Screen.width - width) / 2
     y: Screen.height - height - 50
 
@@ -39,6 +39,10 @@ Window {
             errorDialog.text = msg
             errorDialog.open()
         }
+        onResultDebug: function(label, x1, y1, x2, y2) {
+            console.log("onResultDebug: l: ", label, ", x1: ", x1)
+            screenAreaSelectorWindowsCanvas.requestPaint()
+        }
     }
 
     Row {
@@ -50,8 +54,16 @@ Window {
             interval: 1000 / frameRate.value;
             repeat: true
             onTriggered: {
+                if (Style.debugMod) {
+                    // TODO: also hide control window
+                    screenAreaSelectorWindows.visible = false
+                }
+                // TODO: run `run` in separate thread
                 involvementEstimator.run(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
                                          screenAreaSelectorWindows.width, screenAreaSelectorWindows.height);
+                if (Style.debugMod) {
+                    screenAreaSelectorWindows.visible = true
+                }
             }
          }
 
@@ -62,14 +74,30 @@ Window {
             text: qsTr("Start capturing")
             font.pixelSize: Style.fontSize
             onClicked: {
+                // TODO: or Acync run is running
                 if (timer.running) {
                     screenAreaSelectorWindows.visible = true
+                    if (autoFrameRate.checked !== true) {
+                        timer.stop()
+                    } else {
+                        console.log("Async run should be stopped")
+                    }
+                    if (!Style.debugMod) {
+                        screenAreaSelectorWindows.visible = true
+                    }
                     text = qsTr("Start capturing")
-                    timer.stop()
                 } else {
                     screenAreaSelectorWindows.visible = false
+                    if (!Style.debugMod) {
+                        screenAreaSelectorWindows.visible = false
+                    }
                     text = qsTr("Stop capturing")
                     timer.start()
+                    if (autoFrameRate.checked !== true) {
+                        timer.start()
+                    } else {
+                        console.log("Async run should be started")
+                    }
                 }
             }
         }

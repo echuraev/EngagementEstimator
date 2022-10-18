@@ -7,7 +7,7 @@ MTCNNWrapper::MTCNNWrapper()
 {
 }
 
-std::vector<Face> MTCNNWrapper::detect(const QPixmap input)
+std::vector<Face> MTCNNWrapper::detect(const QPixmap& input)
 {
     QImage qImg = input.toImage();
     qImg.convertTo(QImage::Format_RGB888);

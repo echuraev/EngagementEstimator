@@ -11,7 +11,7 @@ tvm::runtime::NDArray EnetB08BestAfewWrapper::getInputTensor(const QPixmap input
 {
     DLDevice devCPU{kDLCPU, 0};
     auto in_arr = tvm::runtime::NDArray::Empty({1, 3, 224, 224}, DLDataType{kDLFloat, 32, 1}, devCPU);
-    QImage img = input.toImage();
+    QImage img = input.scaled(224, 224).toImage();
     img.convertTo(QImage::Format_RGB32);
     const float rMean = 0.485;
     const float gMean = 0.456;
@@ -35,7 +35,6 @@ tvm::runtime::NDArray EnetB08BestAfewWrapper::getInputTensor(const QPixmap input
             static_cast<float*>(in_arr->data)[rIdx] = r;
             static_cast<float*>(in_arr->data)[gIdx] = g;
             static_cast<float*>(in_arr->data)[bIdx] = b;
-            //qDebug() << "r: " << r << ", " << static_cast<float*>(in_arr->data)[rIdx];
         }
     }
     return in_arr;
@@ -59,4 +58,5 @@ std::string EnetB08BestAfewWrapper::classifyEmition(const tvm::runtime::NDArray&
 std::string EnetB08BestAfewWrapper::getModelPath()
 {
     return "/Users/echuraev/Workspace/HSE/InvolvementEstimator/InvolvementEstimator/models/enet_b0_8_best_afew.so";
+    //return "qrc:/models/enet_b0_8_best_afew.so";
 }

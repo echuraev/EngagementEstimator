@@ -2,6 +2,7 @@
 
 #include <QPixmap>
 #include <QDebug>
+#include <QFile>
 #include <algorithm>
 
 #undef slots
@@ -16,7 +17,8 @@ ModelExecutor::ModelExecutor()
 
 void ModelExecutor::loadModel(std::string modelName)
 {
-    // TODO: add check if file exists
+    if (!QFile::exists(QString::fromStdString(modelName)))
+        throw std::runtime_error("Cannot load model: " + modelName);
     m_module = tvm::runtime::Module::LoadFromFile(modelName);
 }
 
