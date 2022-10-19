@@ -57,6 +57,7 @@ std::string EnetB08BestAfewWrapper::classifyEmition(const tvm::runtime::NDArray&
 
 std::string EnetB08BestAfewWrapper::getModelPath()
 {
+    // TODO: fix full path
     return "/Users/echuraev/Workspace/HSE/InvolvementEstimator/InvolvementEstimator/models/enet_b0_8_best_afew.so";
     //return "qrc:/models/enet_b0_8_best_afew.so";
 }

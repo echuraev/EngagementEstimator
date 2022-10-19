@@ -3,14 +3,12 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs
 import Qt.labs.platform
-import QtQml
 
 import ru.hse.involvementEstimator 1.0
 
-// TODO: add possibility to move this window
 Window {
     id: controlsWindow
-    width: 200
+    width: 259
     height: 30
     visible: true
     title: qsTr("Screen capture controls")
@@ -47,9 +45,29 @@ Window {
         }
     }
 
-    Row {
-        id: row
+    // The central area for moving the application window
+    // Here you already need to use the position both along the X axis and the Y axis
+    MouseArea {
         anchors.fill: parent
+        cursorShape:  Qt.SizeAllCursor
+
+        onPressed: {
+            previousX = mouseX
+            previousY = mouseY
+        }
+
+        onMouseXChanged: {
+            var dx = mouseX - previousX
+            var new_x = Math.max(controlsWindow.x + dx, 0)
+            // TODO: do the same think for right border
+            controlsWindow.setX(new_x)
+        }
+
+        onMouseYChanged: {
+            var dy = mouseY - previousY
+            var new_y = Math.max(controlsWindow.y + dy, 0)
+            controlsWindow.setY(new_y)
+        }
 
         Timer {
             id: timer
@@ -71,8 +89,11 @@ Window {
          }
 
         Button {
+            id: startButton
+            anchors.left: parent.left
+            anchors.leftMargin: 7
             //height: Style.height
-            //width: Style.widthMedium
+            width: 120
             //background: StyleRectangle { anchors.fill: parent }
             text: qsTr("Start capturing")
             font.pixelSize: Style.fontSize
@@ -101,6 +122,10 @@ Window {
         }
 
         Button {
+            id: closeButton
+            anchors.right: parent.right
+            anchors.rightMargin: 7
+            width: 120
             //height: Style.height
             //width: Style.widthMedium
             //background: StyleRectangle { anchors.fill: parent }

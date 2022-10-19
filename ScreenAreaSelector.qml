@@ -9,7 +9,7 @@ Window {
     visible: true
     title: qsTr("Select area")
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint
-    // TODO: Find better
+    // TODO: Find better color
     //color: "#d390909d"
     color: "#00000000"
 
