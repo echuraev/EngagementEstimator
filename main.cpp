@@ -7,6 +7,7 @@
 #include <QQmlContext>
 
 #include "involvementestimator.h"
+#include "debuginfodrawer.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     qmlRegisterType<InvolvementEstimator>("ru.hse.involvementEstimator", 1, 0, "InvolvementEstimator");
+    qmlRegisterType<DebugInfoDrawer>("ru.hse.debugInfoDrawer", 1, 0, "DebugInfoDrawer");
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();

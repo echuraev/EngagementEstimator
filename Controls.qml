@@ -3,9 +3,11 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs
 import Qt.labs.platform
+import QtQml
 
 import ru.hse.involvementEstimator 1.0
 
+// TODO: add possibility to move this window
 Window {
     id: controlsWindow
     width: 200
@@ -39,9 +41,9 @@ Window {
             errorDialog.text = msg
             errorDialog.open()
         }
-        onResultDebug: function(label, x1, y1, x2, y2) {
-            console.log("onResultDebug: l: ", label, ", x1: ", x1)
-            screenAreaSelectorWindowsCanvas.requestPaint()
+        onResultDebug: function(faces) {
+            console.log("onResultDebug: l: faces ")
+            debugInfoDrawer.recvResults(faces)
         }
     }
 
@@ -56,6 +58,7 @@ Window {
             onTriggered: {
                 if (Style.debugMod) {
                     // TODO: also hide control window
+                    // TODO: hide only for screen capturing
                     screenAreaSelectorWindows.visible = false
                 }
                 // TODO: run `run` in separate thread
@@ -76,23 +79,18 @@ Window {
             onClicked: {
                 // TODO: or Acync run is running
                 if (timer.running) {
-                    screenAreaSelectorWindows.visible = true
                     if (autoFrameRate.checked !== true) {
                         timer.stop()
                     } else {
                         console.log("Async run should be stopped")
                     }
-                    if (!Style.debugMod) {
-                        screenAreaSelectorWindows.visible = true
-                    }
+                    screenAreaSelectorWindows.visible = true
                     text = qsTr("Start capturing")
                 } else {
-                    screenAreaSelectorWindows.visible = false
                     if (!Style.debugMod) {
                         screenAreaSelectorWindows.visible = false
                     }
                     text = qsTr("Stop capturing")
-                    timer.start()
                     if (autoFrameRate.checked !== true) {
                         timer.start()
                     } else {

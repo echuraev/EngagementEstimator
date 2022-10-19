@@ -6,6 +6,15 @@
 #include <QPixmap>
 //#ifdef DEBUG_MOD
 #include <QVector>
+
+struct FaceInfo {
+    QString m_label;
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+};
+
 //#endif
 
 class InvolvementEstimator : public QObject
@@ -21,9 +30,7 @@ public slots:
 signals:
     void error(const QString& msg);
 //#ifdef DEBUG_MOD
-    //void resultDebug(const QVector<QMLFace>& faces);
-    void resultDebug(const QVector<QString>& label, const QVector<float>& x1,
-                     const QVector<float>& y1, const QVector<float>& x2, const QVector<float>& y2);
+    void resultDebug(const QVector<FaceInfo>& faces);
 //#endif
 };
 

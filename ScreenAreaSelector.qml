@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Window 2.15
+import ru.hse.debugInfoDrawer 1.0
 
 Window {
     id: screenAreaSelectorWindows
@@ -8,7 +9,9 @@ Window {
     visible: true
     title: qsTr("Select area")
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint
-    color: "#d390909d"
+    // TODO: Find better
+    //color: "#d390909d"
+    color: "#00000000"
 
     // Declare properties that will store the position of the mouse cursor
     property int previousX
@@ -27,7 +30,7 @@ Window {
     }
 
     Canvas {
-        id: screenAreaSelectorWindowsCanvas
+        id: border
         anchors.fill: parent
         onPaint: {
             var ctx = getContext("2d");
@@ -42,6 +45,11 @@ Window {
             ctx.lineTo(0, 0);
             ctx.stroke();
          }
+
+        DebugInfoDrawer {
+            id: debugInfoDrawer
+            anchors.fill: parent
+        }
     }
 
     MouseArea {

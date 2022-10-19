@@ -19,6 +19,7 @@ set(TS_FILES InvolvementEstimator_ru_RU.ts)
 option(DEBUG_MOD "Build project in debug mode. Fix also in Style.qml" ON)
 
 set(PROJECT_SOURCES
+        debuginfodrawer.cpp
         enetb08bestafewwrapper.cpp
         involvementestimator.cpp
         main.cpp

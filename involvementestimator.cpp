@@ -19,14 +19,14 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
 {
     try {
         auto screenPixmap = ScreenCapture::capture(x, y, width, height);
+        const int coef = std::max(screenPixmap.width() / width, screenPixmap.height() / height);
         MTCNNWrapper detector;
         auto faces = detector.detect(screenPixmap);
 
         ModelExecutor executor;
         executor.loadModel(EnetB08BestAfewWrapper::getModelPath());
         //#ifdef DEBUG_MOD
-        QVector<QString> label;
-        QVector<float> x1, y1, x2, y2;
+        QVector<FaceInfo> faceInfo;
         //#endif
         for (auto& face : faces) {
             QPixmap f = screenPixmap.copy(face.bbox.x1, face.bbox.y1, face.bbox.x2 - face.bbox.x1, face.bbox.y2 - face.bbox.y1);
@@ -34,14 +34,10 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
             auto output = EnetB08BestAfewWrapper::getOutputTensor();
             executor.run(input, output);
             auto emotion = EnetB08BestAfewWrapper::classifyEmition(output);
-            label.push_back(emotion.c_str());
-            x1.push_back(face.bbox.x1);
-            y1.push_back(face.bbox.y1);
-            x2.push_back(face.bbox.x2);
-            y2.push_back(face.bbox.y2);
+            faceInfo.push_back({emotion.c_str(), face.bbox.x1/coef, face.bbox.y1/coef, face.bbox.x2/coef, face.bbox.y2/coef});
             qDebug() << "Result: " << emotion.c_str();
         }
-        emit resultDebug(label, x1, y1, x2, y2);
+        emit resultDebug(faceInfo);
           qDebug() << "Result: " << faces.size();
     } catch (std::exception& e) {
         emit error(e.what());
