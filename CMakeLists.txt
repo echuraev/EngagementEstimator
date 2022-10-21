@@ -104,3 +104,9 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_import_qml_plugins(InvolvementEstimator)
     qt_finalize_executable(InvolvementEstimator)
 endif()
+
+add_custom_command(
+    TARGET InvolvementEstimator POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:InvolvementEstimator>/resources
+)

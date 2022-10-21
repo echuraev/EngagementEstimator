@@ -14,8 +14,7 @@ public:
     std::vector<Face> detect(const QPixmap& input);
 
 private:
-    const std::string m_root = "/Users/echuraev/Workspace/HSE/InvolvementEstimator/InvolvementEstimator/";
-    const std::string m_modelDir = m_root + "opencv-mtcnn/data/models/";
+    const std::string m_modelDir = "resources/models/opencv-mtcnn/";
     const ProposalNetwork::Config m_pConfig = {m_modelDir + "det1.prototxt", m_modelDir + "det1.caffemodel", 0.6f};
     const RefineNetwork::Config m_rConfig = {m_modelDir + "det2.prototxt", m_modelDir + "det2.caffemodel", 0.7f};
     const OutputNetwork::Config m_oConfig = {m_modelDir + "det3.prototxt", m_modelDir + "det3.caffemodel", 0.7f};
