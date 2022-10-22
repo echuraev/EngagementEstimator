@@ -16,19 +16,32 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Widgets Lingui
 
 set(TS_FILES InvolvementEstimator_ru_RU.ts)
 
-option(DEBUG_MOD "Build project in debug mode. Fix also in Style.qml" ON)
+add_definitions(-DDEBUG_MOD)
 
-set(PROJECT_SOURCES
-        debuginfodrawer.cpp
-        enetb08bestafewwrapper.cpp
-        involvementestimator.cpp
-        main.cpp
-        modelexecutor.cpp
-        mtcnnwrapper.cpp
-        screencapture.cpp
-        qml.qrc
-        ${TS_FILES}
-)
+if(${DEBUG_MOD})
+    set(PROJECT_SOURCES
+            debuginfodrawer.cpp
+            enetb08bestafewwrapper.cpp
+            involvementestimator.cpp
+            main.cpp
+            modelexecutor.cpp
+            mtcnnwrapper.cpp
+            screencapture.cpp
+            qml.qrc
+            ${TS_FILES}
+    )
+else()
+    set(PROJECT_SOURCES
+            enetb08bestafewwrapper.cpp
+            involvementestimator.cpp
+            main.cpp
+            modelexecutor.cpp
+            mtcnnwrapper.cpp
+            screencapture.cpp
+            qml.qrc
+            ${TS_FILES}
+    )
+endif()
 
 find_package(OpenCV REQUIRED)
 

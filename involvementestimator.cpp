@@ -25,20 +25,24 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
 
         ModelExecutor executor;
         executor.loadModel(EnetB08BestAfewWrapper::getModelPath());
-        //#ifdef DEBUG_MOD
+#ifdef DEBUG_MOD
         QVector<FaceInfo> faceInfo;
-        //#endif
+#endif
         for (auto& face : faces) {
             QPixmap f = screenPixmap.copy(face.bbox.x1, face.bbox.y1, face.bbox.x2 - face.bbox.x1, face.bbox.y2 - face.bbox.y1);
             auto input = EnetB08BestAfewWrapper::getInputTensor(f);
             auto output = EnetB08BestAfewWrapper::getOutputTensor();
             executor.run(input, output);
             auto emotion = EnetB08BestAfewWrapper::classifyEmition(output);
+#ifdef DEBUG_MOD
             faceInfo.push_back({emotion.c_str(), face.bbox.x1/coef, face.bbox.y1/coef, face.bbox.x2/coef, face.bbox.y2/coef});
-            qDebug() << "Result: " << emotion.c_str();
+#endif
+            qDebug() << "Result emotion: " << emotion.c_str();
         }
+#ifdef DEBUG_MOD
         emit resultDebug(faceInfo);
-          qDebug() << "Result: " << faces.size();
+#endif
+        qDebug() << "Result size: " << faces.size();
     } catch (std::exception& e) {
         emit error(e.what());
     } catch (...) {
