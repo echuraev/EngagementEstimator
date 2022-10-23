@@ -20,32 +20,18 @@ set(TS_FILES InvolvementEstimator_ru_RU.ts)
 
 add_definitions(-DDEBUG_MOD)
 
-if(${DEBUG_MOD})
-    set(PROJECT_SOURCES
-            debuginfodrawer.cpp
-            enetb08bestafewwrapper.cpp
-            involvementestimator.cpp
-            main.cpp
-            modelexecutor.cpp
-            mtcnnwrapper.cpp
-            ocrwrapper.cpp
-            screencapture.cpp
-            qml.qrc
-            ${TS_FILES}
-    )
-else()
-    set(PROJECT_SOURCES
-            enetb08bestafewwrapper.cpp
-            involvementestimator.cpp
-            main.cpp
-            modelexecutor.cpp
-            mtcnnwrapper.cpp
-            ocrwrapper.cpp
-            screencapture.cpp
-            qml.qrc
-            ${TS_FILES}
-    )
-endif()
+set(PROJECT_SOURCES
+        debuginfodrawer.cpp
+        enetb08bestafewwrapper.cpp
+        involvementestimator.cpp
+        main.cpp
+        modelexecutor.cpp
+        mtcnnwrapper.cpp
+        ocrwrapper.cpp
+        screencapture.cpp
+        qml.qrc
+        ${TS_FILES}
+)
 
 find_package(OpenCV REQUIRED)
 find_package(Tesseract REQUIRED)

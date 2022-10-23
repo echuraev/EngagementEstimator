@@ -86,7 +86,7 @@ Window {
                 text: qsTr("Select area")
                 font.pixelSize: Style.fontSize
                 onClicked: {
-                    if (Style.debugMod) {
+                    if (DEBUG_MOD) {
                         console.log("WARNING!!!")
                         console.log("You run application in debug mode")
                         console.log("WARNING!!!")

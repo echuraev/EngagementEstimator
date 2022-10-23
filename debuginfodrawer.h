@@ -3,21 +3,8 @@
 
 #include <QPainter>
 #include <QQuickPaintedItem>
-#include <QVector>
 
-struct FaceInfo {
-    QString label;
-    QString id;
-    float x1;
-    float y1;
-    float x2;
-    float y2;
-};
-
-struct DebugInfo {
-    QVector<FaceInfo> faces;
-    double inferTime = 0;
-};
+#include "resultinfo.h"
 
 class DebugInfoDrawer : public QQuickPaintedItem
 {
@@ -25,13 +12,16 @@ class DebugInfoDrawer : public QQuickPaintedItem
 public:
     DebugInfoDrawer();
     ~DebugInfoDrawer() = default;
+
     void paint(QPainter *painter) final;
 
+#ifdef DEBUG_MOD
 public slots:
-    void recvResults(const DebugInfo& debugInfo);
+    void recvResults(const ResultInfo& resultInfo);
 
 private:
-    DebugInfo m_debugInfo;
+    ResultInfo m_resultInfo;
+#endif // DEBUG_MOD
 };
 
 #endif // DEBUGINFODRAWER_H

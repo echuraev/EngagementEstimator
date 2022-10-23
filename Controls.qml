@@ -39,9 +39,13 @@ Window {
             errorDialog.text = msg
             errorDialog.open()
         }
-        onResultDebug: function(faces) {
-            console.log("onResultDebug: l: faces ")
-            debugInfoDrawer.recvResults(faces)
+        onResult: function(faces) {
+            if (DEBUG_MOD) {
+                console.log("onResultDebug: l: faces ")
+                debugInfoDrawer.recvResults(faces)
+            } else {
+                console.log("WARNING!!! Signal onResult was sent from InvolvementEstimator in non debug mode!")
+            }
         }
     }
 
@@ -74,7 +78,7 @@ Window {
             interval: 1000 / frameRate.value;
             repeat: true
             onTriggered: {
-                if (Style.debugMod) {
+                if (DEBUG_MOD) {
                     // TODO: also hide control window
                     // TODO: hide only for screen capturing
                     screenAreaSelectorWindows.visible = false
@@ -82,7 +86,7 @@ Window {
                 // TODO: run `run` in separate thread
                 involvementEstimator.run(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
                                          screenAreaSelectorWindows.width, screenAreaSelectorWindows.height);
-                if (Style.debugMod) {
+                if (DEBUG_MOD) {
                     screenAreaSelectorWindows.visible = true
                 }
             }
@@ -108,7 +112,7 @@ Window {
                     screenAreaSelectorWindows.visible = true
                     text = qsTr("Start capturing")
                 } else {
-                    if (!Style.debugMod) {
+                    if (!DEBUG_MOD) {
                         screenAreaSelectorWindows.visible = false
                     }
                     text = qsTr("Stop capturing")

@@ -1,6 +1,6 @@
+#include "involvementestimator.h"
 #include "enetb08bestafewwrapper.h"
 #include "mtcnnwrapper.h"
-#include "involvementestimator.h"
 #include "modelexecutor.h"
 #include "screencapture.h"
 #include "ocrwrapper.h"
@@ -26,7 +26,7 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
 {
     try {
 #ifdef DEBUG_MOD
-        DebugInfo debugInfo;
+        ResultInfo resultInfo;
         auto start = std::chrono::high_resolution_clock::now();
 #endif
         auto screenPixmap = ScreenCapture::capture(x, y, width, height);
@@ -46,7 +46,7 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
             auto emotion = EnetB08BestAfewWrapper::classifyEmition(output);
             auto id = ocr.getTextFromImg(f);
 #ifdef DEBUG_MOD
-            debugInfo.faces.push_back({emotion.c_str(), id, face.bbox.x1/coef, face.bbox.y1/coef,
+            resultInfo.faces.push_back({emotion.c_str(), id, face.bbox.x1/coef, face.bbox.y1/coef,
                                        face.bbox.x2/coef, face.bbox.y2/coef});
 #endif
             qDebug() << "Result emotion: " << emotion.c_str() << ", text: " << id;
@@ -54,8 +54,8 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
 #ifdef DEBUG_MOD
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> ms_double = end - start;
-        debugInfo.inferTime = ms_double.count();
-        emit resultDebug(debugInfo);
+        resultInfo.inferTime = ms_double.count();
+        emit result(resultInfo);
 #endif
         qDebug() << "Result size: " << faces.size();
     } catch (std::exception& e) {

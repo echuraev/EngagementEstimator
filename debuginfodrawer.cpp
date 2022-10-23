@@ -1,4 +1,5 @@
 #include "debuginfodrawer.h"
+#include "involvementestimator.h"
 #include <QDebug>
 
 DebugInfoDrawer::DebugInfoDrawer()
@@ -6,6 +7,7 @@ DebugInfoDrawer::DebugInfoDrawer()
 
 }
 
+#ifdef DEBUG_MOD
 void DebugInfoDrawer::paint(QPainter *painter)
 {
     painter->save();
@@ -15,7 +17,7 @@ void DebugInfoDrawer::paint(QPainter *painter)
     font.setPointSize(fontSize);
     painter->setFont(font);
 
-    for (auto& f : m_debugInfo.faces) {
+    for (auto& f : m_resultInfo.faces) {
         QList<QLineF> lines;
         lines.append({f.x1, f.y1, f.x2, f.y1});
         lines.append({f.x2, f.y1, f.x2, f.y2});
@@ -25,16 +27,21 @@ void DebugInfoDrawer::paint(QPainter *painter)
         QString text = "Emotion: " + f.label + ", id: " + f.id;
         painter->drawText(QPointF(f.x1, f.y1 - 5), text);
     }
-    if (m_debugInfo.inferTime > 0) {
-        QString text = "Infer time: " + QString::number(m_debugInfo.inferTime) + " ms.";
+    if (m_resultInfo.inferTime > 0) {
+        QString text = "Infer time: " + QString::number(m_resultInfo.inferTime) + " ms.";
         painter->drawText(QPointF(10, 20), text);
     }
 
     painter->restore();
 }
 
-void DebugInfoDrawer::recvResults(const DebugInfo& debugInfo)
+void DebugInfoDrawer::recvResults(const ResultInfo& resultInfo)
 {
-    m_debugInfo = debugInfo;
+    m_resultInfo = resultInfo;
     update();
 }
+#else
+void DebugInfoDrawer::paint(QPainter *painter)
+{
+}
+#endif // DEBUG_MOD

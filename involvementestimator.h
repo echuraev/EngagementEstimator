@@ -5,9 +5,7 @@
 #include <QtQml/qqmlregistration.h>
 #include <QPixmap>
 
-#ifdef DEBUG_MOD
-struct DebugInfo;
-#endif
+#include "resultinfo.h"
 
 class InvolvementEstimator : public QObject
 {
@@ -21,9 +19,9 @@ public slots:
 
 signals:
     void error(const QString& msg);
-#ifdef DEBUG_MOD
-    void resultDebug(const DebugInfo& debugInfo);
-#endif
+    // Currently we use signal result only in DEBUG_MOD.
+    // Probably something will be changed in the future
+    void result(const ResultInfo& resultInfo);
 };
 
 #endif // INVOLVEMENTESTIMATOR_H
