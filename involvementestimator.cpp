@@ -3,6 +3,7 @@
 #include "involvementestimator.h"
 #include "modelexecutor.h"
 #include "screencapture.h"
+#include "ocrwrapper.h"
 
 #include <string>
 
@@ -22,6 +23,8 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
         const int coef = std::max(screenPixmap.width() / width, screenPixmap.height() / height);
         MTCNNWrapper detector;
         auto faces = detector.detect(screenPixmap);
+        OCRWrapper ocr;
+        ocr.Init();
 
         ModelExecutor executor;
         executor.loadModel(EnetB08BestAfewWrapper::getModelPath());
@@ -37,7 +40,8 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
 #ifdef DEBUG_MOD
             faceInfo.push_back({emotion.c_str(), face.bbox.x1/coef, face.bbox.y1/coef, face.bbox.x2/coef, face.bbox.y2/coef});
 #endif
-            qDebug() << "Result emotion: " << emotion.c_str();
+            auto text = ocr.getTextFromImg(f);
+            qDebug() << "Result emotion: " << emotion.c_str() << ", text: " << text;
         }
 #ifdef DEBUG_MOD
         emit resultDebug(faceInfo);

@@ -11,6 +11,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Widgets LinguistTools)
 
@@ -26,6 +28,7 @@ if(${DEBUG_MOD})
             main.cpp
             modelexecutor.cpp
             mtcnnwrapper.cpp
+            ocrwrapper.cpp
             screencapture.cpp
             qml.qrc
             ${TS_FILES}
@@ -37,6 +40,7 @@ else()
             main.cpp
             modelexecutor.cpp
             mtcnnwrapper.cpp
+            ocrwrapper.cpp
             screencapture.cpp
             qml.qrc
             ${TS_FILES}
@@ -44,6 +48,7 @@ else()
 endif()
 
 find_package(OpenCV REQUIRED)
+find_package(Tesseract REQUIRED)
 
 set(MTCNN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/opencv-mtcnn/lib")
 add_subdirectory("${MTCNN_PATH}")
@@ -87,6 +92,7 @@ target_include_directories(InvolvementEstimator PRIVATE
     "${TVM_BUILD_DIR}/../3rdparty/dmlc-core/include/"
     "${TVM_BUILD_DIR}/../3rdparty/dlpack/include"
     "${MTCNN_LIB_INCLUDE_PATH}"
+    "${Tesseract_INCLUDE_DIR}"
     ${OpenCV_INCLUDE_DIRS}
 )
 
@@ -101,6 +107,7 @@ target_link_libraries(InvolvementEstimator
   Qt${QT_VERSION_MAJOR}::Widgets
   ${LIB_TVM}
   ${OpenCV_LIBS}
+  ${Tesseract_LIBRARY}
   mtcnn
 )
 
