@@ -4,18 +4,10 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 #include <QPixmap>
-//#ifdef DEBUG_MOD
-#include <QVector>
 
-struct FaceInfo {
-    QString m_label;
-    float x1;
-    float y1;
-    float x2;
-    float y2;
-};
-
-//#endif
+#ifdef DEBUG_MOD
+struct DebugInfo;
+#endif
 
 class InvolvementEstimator : public QObject
 {
@@ -29,9 +21,9 @@ public slots:
 
 signals:
     void error(const QString& msg);
-//#ifdef DEBUG_MOD
-    void resultDebug(const QVector<FaceInfo>& faces);
-//#endif
+#ifdef DEBUG_MOD
+    void resultDebug(const DebugInfo& debugInfo);
+#endif
 };
 
 #endif // INVOLVEMENTESTIMATOR_H
