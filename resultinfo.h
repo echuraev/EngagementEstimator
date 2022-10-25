@@ -1,12 +1,14 @@
 #ifndef RESULTINFO_H
 #define RESULTINFO_H
 
+#include <QPixmap>
 #include <QString>
 #include <QVector>
 
 struct FaceInfo {
     QString label;
     QString id;
+    QPixmap frame;
     float x1;
     float y1;
     float x2;

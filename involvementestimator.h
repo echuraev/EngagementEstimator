@@ -6,6 +6,7 @@
 #include <QPixmap>
 
 #include "resultinfo.h"
+#include "facetracker.h"
 
 class InvolvementEstimator : public QObject
 {
@@ -22,6 +23,9 @@ signals:
     // Currently we use signal result only in DEBUG_MOD.
     // Probably something will be changed in the future
     void result(const ResultInfo& resultInfo);
+
+private:
+    FaceTracker m_faceTracker;
 };
 
 #endif // INVOLVEMENTESTIMATOR_H

@@ -27,13 +27,13 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
     try {
 #ifdef DEBUG_MOD
         ResultInfo resultInfo;
-        auto start = std::chrono::high_resolution_clock::now();
 #endif
+        MTCNNWrapper detector;
+        OCRWrapper ocr;
+        auto start = std::chrono::high_resolution_clock::now();
         auto screenPixmap = ScreenCapture::capture(x, y, width, height);
         const int coef = std::max(screenPixmap.width() / width, screenPixmap.height() / height);
-        MTCNNWrapper detector;
         auto faces = detector.detect(screenPixmap);
-        OCRWrapper ocr;
         ocr.Init();
 
         ModelExecutor executor;
@@ -46,11 +46,12 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
             auto emotion = EnetB08BestAfewWrapper::classifyEmition(output);
             auto id = ocr.getTextFromImg(f);
 #ifdef DEBUG_MOD
-            resultInfo.faces.push_back({emotion.c_str(), id, face.bbox.x1/coef, face.bbox.y1/coef,
+            resultInfo.faces.push_back({emotion.c_str(), id, f, face.bbox.x1/coef, face.bbox.y1/coef,
                                        face.bbox.x2/coef, face.bbox.y2/coef});
 #endif
             qDebug() << "Result emotion: " << emotion.c_str() << ", text: " << id;
         }
+        m_faceTracker.trackFaces(start.time_since_epoch().count(), resultInfo);
 #ifdef DEBUG_MOD
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> ms_double = end - start;

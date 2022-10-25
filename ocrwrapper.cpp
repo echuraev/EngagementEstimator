@@ -17,6 +17,8 @@ OCRWrapper::~OCRWrapper()
 
 void OCRWrapper::Init()
 {
+    if (m_initialized)
+        return;
     m_api = std::make_unique<tesseract::TessBaseAPI>();
     // Initialize tesseract-ocr with English, without specifying tessdata path
     if (m_api->Init(NULL, "eng")) {

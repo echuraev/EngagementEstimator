@@ -23,6 +23,7 @@ add_definitions(-DDEBUG_MOD)
 set(PROJECT_SOURCES
         debuginfodrawer.cpp
         enetb08bestafewwrapper.cpp
+        facetracker.cpp
         involvementestimator.cpp
         main.cpp
         modelexecutor.cpp
