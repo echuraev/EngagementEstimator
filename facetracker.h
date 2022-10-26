@@ -4,6 +4,7 @@
 #include <QPixmap>
 #include <QVector>
 
+#include <chrono>
 #include <string>
 #include <unordered_map>
 
@@ -12,17 +13,18 @@
 class FaceTracker
 {
 public:
+    using Timestamp = std::chrono::time_point<std::chrono::system_clock>;
     FaceTracker();
-    void trackFaces(uint64_t timestamp, const ResultInfo& resultInfo);
+    void trackFaces(Timestamp timestamp, const ResultInfo& resultInfo);
 
 private:
     struct TrackerInfo {
         QVector<QPixmap> frames;
         QString label;
         QString id;
-        uint64_t timestamp;
+        Timestamp timestamp;
     };
-    void finalizeTracking(uint64_t timestamp, const QVector<TrackerInfo>& vec) const;
+    void finalizeTracking(Timestamp timestamp, const QVector<TrackerInfo>& vec) const;
 
 private:
     std::unordered_map<std::string, TrackerInfo> m_trackingFaces = {};

@@ -25,12 +25,13 @@ InvolvementEstimator::InvolvementEstimator(QObject *parent)
 void InvolvementEstimator::run(int x, int y, int width, int height)
 {
     try {
+        auto timePoint = std::chrono::system_clock::now();
 #ifdef DEBUG_MOD
         ResultInfo resultInfo;
+        auto start = std::chrono::high_resolution_clock::now();
 #endif
         MTCNNWrapper detector;
         OCRWrapper ocr;
-        auto start = std::chrono::high_resolution_clock::now();
         auto screenPixmap = ScreenCapture::capture(x, y, width, height);
         const int coef = std::max(screenPixmap.width() / width, screenPixmap.height() / height);
         auto faces = detector.detect(screenPixmap);
@@ -51,7 +52,7 @@ void InvolvementEstimator::run(int x, int y, int width, int height)
 #endif
             qDebug() << "Result emotion: " << emotion.c_str() << ", text: " << id;
         }
-        m_faceTracker.trackFaces(start.time_since_epoch().count(), resultInfo);
+        m_faceTracker.trackFaces(timePoint, resultInfo);
 #ifdef DEBUG_MOD
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> ms_double = end - start;

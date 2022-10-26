@@ -18,7 +18,7 @@ FaceTracker::FaceTracker()
 
 }
 
-void FaceTracker::trackFaces(uint64_t timestamp, const ResultInfo& resultInfo)
+void FaceTracker::trackFaces(Timestamp timestamp, const ResultInfo& resultInfo)
 {
     std::unordered_map<std::string, FrameInfo> resultMap;
     QVector<TrackerInfo> finalizeTrackingVec;
@@ -52,11 +52,12 @@ void FaceTracker::trackFaces(uint64_t timestamp, const ResultInfo& resultInfo)
     finalizeTracking(timestamp, finalizeTrackingVec);
 }
 
-void FaceTracker::finalizeTracking(uint64_t timestamp, const QVector<TrackerInfo>& vec) const
+void FaceTracker::finalizeTracking(Timestamp timestamp, const QVector<TrackerInfo>& vec) const
 {
     for (auto& it : vec) {
-        std::chrono::milliseconds duration(timestamp - it.timestamp);
-        qDebug() << "Finalize: " << timestamp << ", id: " << it.id << ", label: " << it.label
-                 << ", duration: " << duration.count() << " ms, frames: " << it.frames.size();
+        double duration_ms = std::chrono::duration_cast<std::chrono::nanoseconds>(timestamp - it.timestamp).count() * 1e-6;
+        std::time_t t = std::chrono::system_clock::to_time_t(timestamp);
+        qDebug() << "Finalize: " << std::ctime(&t) << ", id: " << it.id << ", label: " << it.label
+                 << ", duration: " << duration_ms << " ms, frames: " << it.frames.size();
     }
 }
