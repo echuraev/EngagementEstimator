@@ -13,6 +13,8 @@ include(SelectLibraryConfigurations)
 select_library_configurations(Tesseract)
 
 set(Tesseract_VERSION ${PC_Tesseract_VERSION})
+link_directories( ${PC_Tesseract_LIBRARY_DIRS} )
+set(Tesseract_LIBRARY ${PC_Tesseract_LIBRARIES})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Tesseract
