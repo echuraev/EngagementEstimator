@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.14)
 
 project(InvolvementEstimator VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -mavx")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -37,8 +37,8 @@ set(PROJECT_SOURCES
 find_package(OpenCV REQUIRED)
 find_package(Tesseract REQUIRED)
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/opencv-mtcnn/lib")
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/dlib/dlib" dlib_build)
+set(MTCNN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/opencv-mtcnn/lib")
+add_subdirectory("${MTCNN_PATH}")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(InvolvementEstimator
@@ -74,7 +74,7 @@ else()
     message("Found TVM build at ${TVM_BUILD_DIR}")
 endif()
 
-target_include_directories(InvolvementEstimator PRIVATE
+include_directories(
     "include"
     "${TVM_BUILD_DIR}/../include"
     "${TVM_BUILD_DIR}/../3rdparty/dmlc-core/include/"
@@ -97,7 +97,6 @@ target_link_libraries(InvolvementEstimator
   ${OpenCV_LIBS}
   ${Tesseract_LIBRARY}
   mtcnn
-  dlib::dlib
 )
 
 # TODO: Update MACOSX_BUNDLE_GUI_IDENTIFIER and check that screen capturer works
