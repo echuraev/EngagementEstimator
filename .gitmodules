@@ -1,3 +1,6 @@
 [submodule "opencv-mtcnn"]
 	path = 3rd_party/opencv-mtcnn
 	url = git@github.com:ksachdeva/opencv-mtcnn.git
+[submodule "3rd_party/dlib"]
+	path = 3rd_party/dlib
+	url = git@github.com:davisking/dlib.git
