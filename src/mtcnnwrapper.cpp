@@ -15,4 +15,3 @@ std::vector<Face> MTCNNWrapper::detect(const QPixmap& input)
     auto faces = m_detector.detect(img, 20.f, 0.709f);
     return faces;
 }
-

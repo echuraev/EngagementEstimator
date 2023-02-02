@@ -20,18 +20,18 @@ set(TS_FILES InvolvementEstimator_ru_RU.ts)
 
 add_definitions(-DDEBUG_MOD)
 
+file(GLOB src_files
+    "src/*.cpp"
+)
+
+FILE(GLOB_RECURSE headers "include/*.h")
+
 set(PROJECT_SOURCES
-        debuginfodrawer.cpp
-        enetb08bestafewwrapper.cpp
-        facetracker.cpp
-        involvementestimator.cpp
-        main.cpp
-        modelexecutor.cpp
-        mtcnnwrapper.cpp
-        ocrwrapper.cpp
-        screencapture.cpp
-        qml.qrc
-        ${TS_FILES}
+    main.cpp
+    ${src_files}
+    ${headers}
+    qml/qml.qrc
+    ${TS_FILES}
 )
 
 find_package(OpenCV REQUIRED)
@@ -74,7 +74,8 @@ else()
     message("Found TVM build at ${TVM_BUILD_DIR}")
 endif()
 
-target_include_directories(InvolvementEstimator PRIVATE
+include_directories(
+    "include"
     "${TVM_BUILD_DIR}/../include"
     "${TVM_BUILD_DIR}/../3rdparty/dmlc-core/include/"
     "${TVM_BUILD_DIR}/../3rdparty/dlpack/include"
