@@ -37,7 +37,7 @@ set(PROJECT_SOURCES
 find_package(OpenCV REQUIRED)
 find_package(Tesseract REQUIRED)
 
-set(MTCNN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/opencv-mtcnn/lib")
+set(MTCNN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/opencv-mtcnn/lib")
 add_subdirectory("${MTCNN_PATH}")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -81,7 +81,7 @@ include_directories(
     "${TVM_BUILD_DIR}/../3rdparty/dlpack/include"
     "${MTCNN_LIB_INCLUDE_PATH}"
     "${Tesseract_INCLUDE_DIR}"
-    ${OpenCV_INCLUDE_DIRS}
+    "${OpenCV_INCLUDE_DIRS}"
 )
 
 find_library(LIB_TVM NAMES tvm_runtime PATHS ${TVM_BUILD_DIR})
