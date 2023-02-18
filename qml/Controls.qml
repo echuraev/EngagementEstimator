@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs
 import Qt.labs.platform
 
-import ru.hse.involvementEstimator 1.0
+import ru.hse.engagementEstimator 1.0
 
 Window {
     id: controlsWindow
@@ -29,8 +29,8 @@ Window {
         }
     }
 
-    InvolvementEstimator {
-        id: involvementEstimator
+    EngagementEstimator {
+        id: engagementEstimator
         onError: function(msg) {
             mainWindow.visible = true
             screenAreaSelectorWindows.close()
@@ -42,7 +42,7 @@ Window {
             if (DEBUG_MOD) {
                 debugInfoDrawer.recvResults(faces)
             } else {
-                console.log("WARNING!!! Signal onResult was sent from InvolvementEstimator in non debug mode!")
+                console.log("WARNING!!! Signal onResult was sent from EngagementEstimator in non debug mode!")
             }
         }
     }
@@ -81,20 +81,20 @@ Window {
             text: qsTr("Start capturing")
             font.pixelSize: Style.fontSize
             onClicked: {
-                if (involvementEstimator.running) {
-                    involvementEstimator.stop()
+                if (engagementEstimator.running) {
+                    engagementEstimator.stop()
                     screenAreaSelectorWindows.visible = true
                     screenAreaSelectorWindows.movable = true
                     text = qsTr("Start capturing")
                 } else {
                     screenAreaSelectorWindows.movable = false
-                    involvementEstimator.setFrameCoordinates(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
+                    engagementEstimator.setFrameCoordinates(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
                                                              screenAreaSelectorWindows.width, screenAreaSelectorWindows.height);
                     if (!DEBUG_MOD) {
                         screenAreaSelectorWindows.visible = false
                     }
                     text = qsTr("Stop capturing")
-                    involvementEstimator.start()
+                    engagementEstimator.start()
                 }
             }
         }
@@ -111,7 +111,7 @@ Window {
             text: qsTr("Close")
             font.pixelSize: Style.fontSize
             onClicked: {
-                involvementEstimator.stop()
+                engagementEstimator.stop()
                 mainWindow.visible = true
                 screenAreaSelectorWindows.close()
                 controlsWindow.close()

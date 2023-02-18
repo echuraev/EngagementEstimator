@@ -52,7 +52,7 @@ namespace {
 
 FaceTracker::FaceTracker(const std::filesystem::path& outputDir)
     : m_outputDir(outputDir)
-    , m_logFileName("involvement_estimator_log.csv")
+    , m_logFileName("engagement_estimator_log.csv")
 {
 
 }

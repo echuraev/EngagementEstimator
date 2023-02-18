@@ -1,4 +1,4 @@
-#include "involvementestimator.h"
+#include "engagementestimator.h"
 #include "enetb08bestafewwrapper.h"
 #include "faceid.h"
 #include "mtcnnwrapper.h"
@@ -19,14 +19,14 @@
 #include <QMutex>
 #include <QPixmap>
 
-InvolvementEstimator::InvolvementEstimator(QObject *parent)
+EngagementEstimator::EngagementEstimator(QObject *parent)
     : QThread(parent)
     //, m_faceTracker("./")
     , m_faceTracker(std::filesystem::current_path() / "test_output")
 {
 }
 
-void InvolvementEstimator::run()
+void EngagementEstimator::run()
 {
     if (!m_frameInitialized) {
         emit error("Error! Frame coordinates should be initialized.");
@@ -84,7 +84,7 @@ void InvolvementEstimator::run()
     m_running = false;
 }
 
-void InvolvementEstimator::setFrameCoordinates(int x, int y, int width, int height) {
+void EngagementEstimator::setFrameCoordinates(int x, int y, int width, int height) {
     static QMutex lock;
     QMutexLocker locker(&lock);
     m_frameInitialized = true;
@@ -94,6 +94,6 @@ void InvolvementEstimator::setFrameCoordinates(int x, int y, int width, int heig
     m_height = height;
 }
 
-void InvolvementEstimator::stop() {
+void EngagementEstimator::stop() {
     this->requestInterruption();
 }

@@ -11,7 +11,7 @@ Window {
     // TODO: size should be fixed
     flags: Qt.Window
     property int index: 0
-    title: qsTr("Involvement Estimator")
+    title: qsTr("Engagement Estimator")
 
     Column {
         id: column

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(InvolvementEstimator VERSION 0.1 LANGUAGES CXX)
+project(EngagementEstimator VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,7 +19,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Widgets LinguistTools)
 
-set(TS_FILES InvolvementEstimator_ru_RU.ts)
+set(TS_FILES ${PROJECT_NAME}_ru_RU.ts)
 
 add_definitions(-DDEBUG_MOD)
 
@@ -44,25 +44,25 @@ set(MTCNN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/opencv-mtcnn/lib")
 add_subdirectory("${MTCNN_PATH}")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(InvolvementEstimator
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET InvolvementEstimator APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
     if(ANDROID)
-        add_library(InvolvementEstimator SHARED
+        add_library(${PROJECT_NAME} SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(InvolvementEstimator
+        add_executable(${PROJECT_NAME}
           ${PROJECT_SOURCES}
         )
     endif()
@@ -89,9 +89,9 @@ include_directories(
 
 find_library(LIB_TVM NAMES tvm_runtime PATHS ${TVM_BUILD_DIR})
 
-target_compile_definitions(InvolvementEstimator
+target_compile_definitions(${PROJECT_NAME}
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-target_link_libraries(InvolvementEstimator
+target_link_libraries(${PROJECT_NAME}
   PRIVATE
   Qt${QT_VERSION_MAJOR}::Core
   Qt${QT_VERSION_MAJOR}::Quick
@@ -103,7 +103,7 @@ target_link_libraries(InvolvementEstimator
 )
 
 # TODO: Update MACOSX_BUNDLE_GUI_IDENTIFIER and check that screen capturer works
-set_target_properties(InvolvementEstimator PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -112,12 +112,12 @@ set_target_properties(InvolvementEstimator PROPERTIES
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_import_qml_plugins(InvolvementEstimator)
-    qt_finalize_executable(InvolvementEstimator)
+    qt_import_qml_plugins(${PROJECT_NAME})
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
 
 add_custom_command(
-    TARGET InvolvementEstimator POST_BUILD
+    TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:InvolvementEstimator>/resources
+        ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:${PROJECT_NAME}>/resources
 )

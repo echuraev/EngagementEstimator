@@ -6,7 +6,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 
-#include "involvementestimator.h"
+#include "engagementestimator.h"
 #include "debuginfodrawer.h"
 
 int main(int argc, char *argv[])
@@ -16,13 +16,13 @@ int main(int argc, char *argv[])
 #endif
     QApplication app(argc, argv);
 
-    qmlRegisterType<InvolvementEstimator>("ru.hse.involvementEstimator", 1, 0, "InvolvementEstimator");
+    qmlRegisterType<EngagementEstimator>("ru.hse.engagementEstimator", 1, 0, "EngagementEstimator");
     qmlRegisterType<DebugInfoDrawer>("ru.hse.debugInfoDrawer", 1, 0, "DebugInfoDrawer");
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
-        const QString baseName = "InvolvementEstimator_" + QLocale(locale).name();
+        const QString baseName = "EngagementEstimator_" + QLocale(locale).name();
         if (translator.load(":/i18n/" + baseName)) {
             app.installTranslator(&translator);
             break;

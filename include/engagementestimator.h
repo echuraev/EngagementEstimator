@@ -1,5 +1,5 @@
-#ifndef INVOLVEMENTESTIMATOR_H
-#define INVOLVEMENTESTIMATOR_H
+#ifndef ENGAGEMENTESTIMATOR_H
+#define ENGAGEMENTESTIMATOR_H
 
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
@@ -9,13 +9,13 @@
 #include "resultinfo.h"
 #include "facetracker.h"
 
-class InvolvementEstimator : public QThread
+class EngagementEstimator : public QThread
 {
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(bool running READ running);
 public:
-    explicit InvolvementEstimator(QObject *parent = nullptr);
+    explicit EngagementEstimator(QObject *parent = nullptr);
     void run();
     inline bool running() const {
         return m_running;
@@ -44,4 +44,4 @@ private:
     bool m_running = false;
 };
 
-#endif // INVOLVEMENTESTIMATOR_H
+#endif // ENGAGEMENTESTIMATOR_H
