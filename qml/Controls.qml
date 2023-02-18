@@ -41,7 +41,6 @@ Window {
         }
         onResult: function(faces) {
             if (DEBUG_MOD) {
-                console.log("onResultDebug: l: faces ")
                 debugInfoDrawer.recvResults(faces)
             } else {
                 console.log("WARNING!!! Signal onResult was sent from InvolvementEstimator in non debug mode!")
@@ -63,7 +62,7 @@ Window {
         onMouseXChanged: {
             var dx = mouseX - previousX
             var new_x = Math.max(controlsWindow.x + dx, 0)
-            // TODO: do the same think for right border
+            // TODO: do the same thing for the right border
             controlsWindow.setX(new_x)
         }
 
@@ -75,7 +74,7 @@ Window {
 
         Timer {
             id: timer
-            interval: 1000 / frameRate.value;
+            interval: 200; //1000 / frameRate.value;
             repeat: true
             onTriggered: {
                 if (DEBUG_MOD) {
@@ -104,11 +103,11 @@ Window {
             onClicked: {
                 // TODO: or Acync run is running
                 if (timer.running) {
-                    if (autoFrameRate.checked !== true) {
+                    //if (autoFrameRate.checked !== true) {
                         timer.stop()
-                    } else {
+                    /*} else {
                         console.log("Async run should be stopped")
-                    }
+                    }*/
                     screenAreaSelectorWindows.visible = true
                     text = qsTr("Start capturing")
                 } else {
@@ -116,11 +115,11 @@ Window {
                         screenAreaSelectorWindows.visible = false
                     }
                     text = qsTr("Stop capturing")
-                    if (autoFrameRate.checked !== true) {
+                    //if (autoFrameRate.checked !== true) {
                         timer.start()
-                    } else {
+                    /*} else {
                         console.log("Async run should be started")
-                    }
+                    }*/
                 }
             }
         }

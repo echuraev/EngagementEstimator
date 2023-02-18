@@ -7,12 +7,13 @@
 
 struct FaceInfo {
     QString label;
-    QString id;
+    std::vector<float> embeddings;
     QPixmap frame;
     float x1;
     float y1;
     float x2;
     float y2;
+    int64_t id;
 };
 
 struct ResultInfo {

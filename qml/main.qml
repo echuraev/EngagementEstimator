@@ -17,7 +17,7 @@ Window {
         id: column
         anchors.fill: parent
 
-        Row {
+        /*Row {
             Text {
                 text: qsTr("Frame rate: ")
                 font.pixelSize: Style.fontSize
@@ -49,7 +49,7 @@ Window {
                     }
                 }
             }
-        }
+        }*/
 
         Row {
             TextField {

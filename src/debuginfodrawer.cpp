@@ -24,7 +24,7 @@ void DebugInfoDrawer::paint(QPainter *painter)
         lines.append({f.x2, f.y2, f.x1, f.y2});
         lines.append({f.x1, f.y2, f.x1, f.y1});
         painter->drawLines(lines);
-        QString text = "Emotion: " + f.label + ", id: " + f.id;
+        QString text = "Emotion: " + f.label + ", id: " + QString::number(f.id);
         painter->drawText(QPointF(f.x1, f.y1 - 5), text);
     }
     if (m_resultInfo.inferTime > 0) {
