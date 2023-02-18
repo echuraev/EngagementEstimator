@@ -20,6 +20,7 @@ Window {
     readonly property int moveZoneSize: 5
     readonly property int minWidth: 200
     readonly property int minHeight: 200
+    property bool movable: true
 
     Component.onCompleted: {
         x = Screen.width / 2 - width / 2
@@ -70,15 +71,19 @@ Window {
         }
 
         onMouseYChanged: {
-            var dy = mouseY - previousY
-            screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
-            screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
+            if (movable) {
+                var dy = mouseY - previousY
+                screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
+                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
+            }
         }
 
         onMouseXChanged: {
-            var dx = mouseX - previousX
-            screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
-            screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
+            if (movable) {
+                var dx = mouseX - previousX
+                screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
+                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
+            }
         }
 
         onReleased: {
@@ -107,14 +112,18 @@ Window {
 
         // When changing a position, we recalculate the position of the window, and its height
         onMouseYChanged: {
-            var dy = mouseY - previousY
-            screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
-            screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
+            if (movable) {
+                var dy = mouseY - previousY
+                screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
+                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
+            }
         }
 
         onMouseXChanged: {
-            var dx = mouseX - previousX
-            screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+            if (movable) {
+                var dx = mouseX - previousX
+                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+            }
         }
 
         onReleased: {
@@ -143,13 +152,17 @@ Window {
 
         // When changing a position, we recalculate the position of the window, and its height
         onMouseYChanged: {
-            var dy = mouseY - previousY
-            screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
+            if (movable) {
+                var dy = mouseY - previousY
+                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
+            }
         }
 
         onMouseXChanged: {
-            var dx = mouseX - previousX
-            screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+            if (movable) {
+                var dx = mouseX - previousX
+                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+            }
         }
 
         onReleased: {
@@ -178,14 +191,18 @@ Window {
 
         // When changing a position, we recalculate the position of the window, and its height
         onMouseYChanged: {
-            var dy = mouseY - previousY
-            screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
+            if (movable) {
+                var dy = mouseY - previousY
+                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
+            }
         }
 
         onMouseXChanged: {
-            var dx = mouseX - previousX
-            screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
-            screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
+            if (movable) {
+                var dx = mouseX - previousX
+                screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
+                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
+            }
         }
 
         onReleased: {
@@ -213,9 +230,11 @@ Window {
 
         // When changing a position, we recalculate the position of the window, and its height
         onMouseYChanged: {
-            var dy = mouseY - previousY
-            screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
-            screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
+            if (movable) {
+                var dy = mouseY - previousY
+                screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
+                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
+            }
         }
 
         onReleased: {
@@ -241,8 +260,10 @@ Window {
         }
 
         onMouseYChanged: {
-            var dy = mouseY - previousY
-            screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
+            if (movable) {
+                var dy = mouseY - previousY
+                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
+            }
         }
 
         onReleased: {
@@ -267,9 +288,11 @@ Window {
         }
 
         onMouseXChanged: {
-            var dx = mouseX - previousX
-            screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
-            screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
+            if (movable) {
+                var dx = mouseX - previousX
+                screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
+                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
+            }
         }
 
         onReleased: {
@@ -294,8 +317,10 @@ Window {
         }
 
         onMouseXChanged: {
-            var dx = mouseX - previousX
-            screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+            if (movable) {
+                var dx = mouseX - previousX
+                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
+            }
         }
 
         onReleased: {
@@ -322,16 +347,20 @@ Window {
         }
 
         onMouseXChanged: {
-            var dx = mouseX - previousX
-            var new_x = Math.max(screenAreaSelectorWindows.x + dx, 0)
-            // TODO: do the same think for right border and for changing sizes
-            screenAreaSelectorWindows.setX(new_x)
+            if (movable) {
+                var dx = mouseX - previousX
+                var new_x = Math.max(screenAreaSelectorWindows.x + dx, 0)
+                // TODO: do the same think for right border and for changing sizes
+                screenAreaSelectorWindows.setX(new_x)
+            }
         }
 
         onMouseYChanged: {
-            var dy = mouseY - previousY
-            var new_y = Math.max(screenAreaSelectorWindows.y + dy, 0)
-            screenAreaSelectorWindows.setY(new_y)
+            if (movable) {
+                var dy = mouseY - previousY
+                var new_y = Math.max(screenAreaSelectorWindows.y + dy, 0)
+                screenAreaSelectorWindows.setY(new_y)
+            }
         }
 
         onReleased: {

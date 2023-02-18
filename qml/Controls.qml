@@ -32,7 +32,6 @@ Window {
     InvolvementEstimator {
         id: involvementEstimator
         onError: function(msg) {
-            timer.stop()
             mainWindow.visible = true
             screenAreaSelectorWindows.close()
             controlsWindow.close();
@@ -72,25 +71,6 @@ Window {
             controlsWindow.setY(new_y)
         }
 
-        Timer {
-            id: timer
-            interval: 200; //1000 / frameRate.value;
-            repeat: true
-            onTriggered: {
-                if (DEBUG_MOD) {
-                    // TODO: also hide control window
-                    // TODO: hide only for screen capturing
-                    screenAreaSelectorWindows.visible = false
-                }
-                // TODO: run `run` in separate thread
-                involvementEstimator.run(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
-                                         screenAreaSelectorWindows.width, screenAreaSelectorWindows.height);
-                if (DEBUG_MOD) {
-                    screenAreaSelectorWindows.visible = true
-                }
-            }
-         }
-
         Button {
             id: startButton
             anchors.left: parent.left
@@ -101,25 +81,20 @@ Window {
             text: qsTr("Start capturing")
             font.pixelSize: Style.fontSize
             onClicked: {
-                // TODO: or Acync run is running
-                if (timer.running) {
-                    //if (autoFrameRate.checked !== true) {
-                        timer.stop()
-                    /*} else {
-                        console.log("Async run should be stopped")
-                    }*/
+                if (involvementEstimator.running) {
+                    involvementEstimator.stop()
                     screenAreaSelectorWindows.visible = true
+                    screenAreaSelectorWindows.movable = true
                     text = qsTr("Start capturing")
                 } else {
+                    screenAreaSelectorWindows.movable = false
+                    involvementEstimator.setFrameCoordinates(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
+                                                             screenAreaSelectorWindows.width, screenAreaSelectorWindows.height);
                     if (!DEBUG_MOD) {
                         screenAreaSelectorWindows.visible = false
                     }
                     text = qsTr("Stop capturing")
-                    //if (autoFrameRate.checked !== true) {
-                        timer.start()
-                    /*} else {
-                        console.log("Async run should be started")
-                    }*/
+                    involvementEstimator.start()
                 }
             }
         }
@@ -136,7 +111,7 @@ Window {
             text: qsTr("Close")
             font.pixelSize: Style.fontSize
             onClicked: {
-                timer.stop()
+                involvementEstimator.stop()
                 mainWindow.visible = true
                 screenAreaSelectorWindows.close()
                 controlsWindow.close()
