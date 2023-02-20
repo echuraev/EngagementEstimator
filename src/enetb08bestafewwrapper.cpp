@@ -57,5 +57,5 @@ std::string EnetB08BestAfewWrapper::classifyEmition(const tvm::runtime::NDArray&
 
 std::string EnetB08BestAfewWrapper::getModelPath()
 {
-    return "resources/models/enet_b0_8_best_afew.so";
+    return "resources/models/enet_b0_8_best_afew.tuned.so";
 }

@@ -5,6 +5,8 @@
 #include <QString>
 #include <QVector>
 
+#include <unordered_map>
+
 struct FaceInfo {
     QString label;
     std::vector<float> embeddings;
@@ -19,7 +21,7 @@ struct FaceInfo {
 struct ResultInfo {
     QVector<FaceInfo> faces;
 #ifdef DEBUG_MOD
-    double inferTime = 0;
+    std::unordered_map<std::string, double> inferTime = {};
 #endif // DEBUG_MOD
 };
 

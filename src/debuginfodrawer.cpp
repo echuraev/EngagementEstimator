@@ -27,9 +27,14 @@ void DebugInfoDrawer::paint(QPainter *painter)
         QString text = "Emotion: " + f.label + ", id: " + QString::number(f.id);
         painter->drawText(QPointF(f.x1, f.y1 - 5), text);
     }
-    if (m_resultInfo.inferTime > 0) {
-        QString text = "Infer time: " + QString::number(m_resultInfo.inferTime) + " ms.";
-        painter->drawText(QPointF(10, 20), text);
+    if (!m_resultInfo.inferTime.empty()) {
+        int xPos = 10;
+        int yPos = 20;
+        QString text = "Infer time: ";
+        for (auto& [key, val] : m_resultInfo.inferTime) {
+            text += QString::fromStdString(key) + ": " + QString::number(val) + " ms. ";
+        }
+        painter->drawText(QPointF(xPos, yPos), text);
     }
 
     painter->restore();
