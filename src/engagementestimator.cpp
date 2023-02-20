@@ -88,10 +88,10 @@ void EngagementEstimator::run()
                 faceid_double += ms_double.count();
 #endif
                 resultInfo.faces.push_back({emotion.c_str(), visualEmbeddings, f, face.bbox.x1/coef, face.bbox.y1/coef,
-                                           face.bbox.x2/coef, face.bbox.y2/coef});
+                                           face.bbox.x2/coef, face.bbox.y2/coef, timePoint});
                 qDebug() << "Result emotion: " << emotion.c_str() << ", text: ";
             }
-            m_faceTracker.trackFaces(timePoint, resultInfo);
+            m_faceTracker.trackFaces(resultInfo);
 #ifdef DEBUG_MOD
             auto end = std::chrono::high_resolution_clock::now();
             ms_double = end - start;

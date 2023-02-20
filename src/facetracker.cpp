@@ -57,7 +57,7 @@ FaceTracker::FaceTracker(const std::filesystem::path& outputDir)
 
 }
 
-void FaceTracker::trackFaces(Timestamp timestamp, ResultInfo& resultInfo)
+void FaceTracker::trackFaces(ResultInfo& resultInfo)
 {
     if (!openLogFile()) {
         qDebug() << "Cannot open " << m_logFileName;
@@ -71,8 +71,7 @@ void FaceTracker::trackFaces(Timestamp timestamp, ResultInfo& resultInfo)
             auto& face = resultInfo.faces[i];
             ++m_latestId;
             face.id = m_latestId;
-            DumperInfo di = {face.frame, face.label, face.id, timestamp};
-            dumpInfo(di);
+            dumpInfo(face);
         }
         m_recentFeatures = features;
         return;
@@ -84,20 +83,17 @@ void FaceTracker::trackFaces(Timestamp timestamp, ResultInfo& resultInfo)
         auto& face = resultInfo.faces[i];
         auto closestInd = sortedIndices[i][0];
         auto minDist = distMatrix[i][closestInd];
-        DumperInfo di;
         if (minDist < 0.85 ||
                 (sortedIndices[i].size() > 1 &&
                  minDist < distMatrix[i][sortedIndices[i][1]] - 0.1)) {
             m_recentFeatures[closestInd] = features[i];
             face.id = closestInd;
-            di = {face.frame, face.label, face.id, timestamp};
         } else {
             ++m_latestId;
             face.id = m_latestId;
-            di = {face.frame, face.label, face.id, timestamp};
             m_recentFeatures.push_back(features[i]);
         }
-        dumpInfo(di);
+        dumpInfo(face);
     }
     m_framesProcessed++;
 }
@@ -123,22 +119,29 @@ bool FaceTracker::openLogFile() {
     if (!m_logFile.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
     QTextStream out(&m_logFile);
-    out << "Person ID;Image name;Emotion;Timestamp\n";
+    out << "Person ID;Image name;Emotion;Timestamp;x0;y0;x1;y1\n";
     return true;
 }
 
-void FaceTracker::dumpInfo(const DumperInfo& di) {
+void FaceTracker::dumpInfo(const FaceInfo& fi) {
     if (!m_logFile.isOpen())
         return;
     std::filesystem::path frameDirPath = std::to_string(m_framesProcessed);
     auto dumpDir = m_outputDir / frameDirPath;
     QDir qDumpDir;
     qDumpDir.mkpath(dumpDir.c_str());
-    frameDirPath /= std::to_string(di.id) + ".png";
+    frameDirPath /= std::to_string(fi.id) + ".png";
     std::string relImgPath = frameDirPath.c_str();
     auto imgPath = m_outputDir / relImgPath;
-    di.frame.save(QString::fromStdString(imgPath.c_str()));
+    fi.frame.save(QString::fromStdString(imgPath.c_str()));
     QTextStream out(&m_logFile);
-    out << di.id << ";" << QString::fromStdString(relImgPath) << ";" << di.label << ";"
-        << di.timestamp.time_since_epoch().count() << "\n";
+    out << fi.id << ";"
+        << QString::fromStdString(relImgPath) << ";"
+        << fi.label << ";"
+        << fi.timestamp.time_since_epoch().count() << ";"
+        << fi.x1 << ";"
+        << fi.y1 << ";"
+        << fi.x2 << ";"
+        << fi.y2 << ";"
+        << "\n";
 }

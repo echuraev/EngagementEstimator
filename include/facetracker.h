@@ -15,21 +15,14 @@
 class FaceTracker
 {
 public:
-    using Timestamp = std::chrono::time_point<std::chrono::system_clock>;
     FaceTracker(const std::filesystem::path& outputDir);
-    void trackFaces(Timestamp timestamp, ResultInfo& resultInfo);
+    void trackFaces(ResultInfo& resultInfo);
     inline void setLogFileName(const QString& logFileName) { m_logFileName = logFileName; }
     //inline void setOutputDir(const QString& outputDir) { m_outputDir = outputDir; }
 
 private:
-    struct DumperInfo {
-        QPixmap frame;
-        QString label;
-        int64_t id;
-        Timestamp timestamp;
-    };
     bool openLogFile();
-    void dumpInfo(const DumperInfo& di);
+    void dumpInfo(const FaceInfo& fi);
 
 private:
     std::vector<std::vector<float>> m_recentFeatures = {};

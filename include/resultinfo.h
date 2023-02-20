@@ -7,6 +7,8 @@
 
 #include <unordered_map>
 
+using Timestamp = std::chrono::time_point<std::chrono::system_clock>;
+
 struct FaceInfo {
     QString label;
     std::vector<float> embeddings;
@@ -15,6 +17,7 @@ struct FaceInfo {
     float y1;
     float x2;
     float y2;
+    Timestamp timestamp;
     int64_t id;
 };
 
