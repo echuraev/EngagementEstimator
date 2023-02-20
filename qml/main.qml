@@ -5,61 +5,28 @@ import Qt.labs.platform
 
 Window {
     id: mainWindow
-    width: 400
-    height: 400
+    width: 300
+    height: 100
     visible: true
-    // TODO: size should be fixed
-    flags: Qt.Window
-    property int index: 0
+    maximumHeight: height
+    maximumWidth: width
+    minimumHeight: height
+    minimumWidth: width
     title: qsTr("Engagement Estimator")
 
     Column {
         id: column
         anchors.fill: parent
 
-        /*Row {
-            Text {
-                text: qsTr("Frame rate: ")
-                font.pixelSize: Style.fontSize
-            }
-
-            SpinBox {
-                id: frameRate
-                from: 3
-                to: 30
-                value: 5
-            }
-
-            Text {
-                text: qsTr("fps")
-                font.pixelSize: Style.fontSize
-            }
-        }
-
-        Row {
-            CheckBox {
-                id: autoFrameRate
-                text: qsTr("Detect frame rate automatically")
-                checkable: true
-                onToggled: function() {
-                    if (autoFrameRate.checked == true) {
-                        frameRate.enabled = false
-                    } else {
-                        frameRate.enabled = true
-                    }
-                }
-            }
-        }*/
-
         Row {
             TextField {
                 id: outputPath
                 placeholderText: qsTr("Select output directory...")
                 readOnly: true
-                //width: parent.width * 0.8
+                width: 230
             }
             Button {
-                //width: parent.width * 0.2
+                width: 70
                 //height: Style.height
                 //width: Style.widthMedium
                 //background: StyleRectangle { anchors.fill: parent }
@@ -72,6 +39,25 @@ Window {
             FolderDialog {
                 id: folderDialog
                 onAccepted: outputPath.text = folderDialog.folder
+            }
+        }
+
+        Row {
+            CheckBox {
+                text: qsTr("Enter path manually")
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("It is a bug in the latest MacOS. Dialog window is crashed. This option can be used to specify output path manually.")
+                onCheckedChanged: outputPath.readOnly = !checked
+            }
+        }
+
+        Row {
+            CheckBox {
+                id: debugMod
+                text: qsTr("Use debug mode")
+                checked: true
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("For now it is just a placeholer and compilation flag is used. Bun in the future it should be fixed.")
             }
         }
 
