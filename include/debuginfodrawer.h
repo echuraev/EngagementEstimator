@@ -21,6 +21,7 @@ public slots:
 
 private:
     ResultInfo m_resultInfo;
+    uint borderMargin = 20;
 #endif // DEBUG_MOD
 };
 

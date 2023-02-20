@@ -19,13 +19,17 @@ void DebugInfoDrawer::paint(QPainter *painter)
 
     for (auto& f : m_resultInfo.faces) {
         QList<QLineF> lines;
-        lines.append({f.x1, f.y1, f.x2, f.y1});
-        lines.append({f.x2, f.y1, f.x2, f.y2});
-        lines.append({f.x2, f.y2, f.x1, f.y2});
-        lines.append({f.x1, f.y2, f.x1, f.y1});
+        auto x1 = f.x1 - borderMargin;
+        auto x2 = f.x2 + borderMargin;
+        auto y1 = f.y1 - borderMargin;
+        auto y2 = f.y2 + borderMargin;
+        lines.append({x1, y1, x2, y1});
+        lines.append({x2, y1, x2, y2});
+        lines.append({x2, y2, x1, y2});
+        lines.append({x1, y2, x1, y1});
         painter->drawLines(lines);
         QString text = "Emotion: " + f.label + ", id: " + QString::number(f.id);
-        painter->drawText(QPointF(f.x1, f.y1 - 5), text);
+        painter->drawText(QPointF(x1, y1 - 5), text);
     }
     if (!m_resultInfo.inferTime.empty()) {
         int xPos = 10;
