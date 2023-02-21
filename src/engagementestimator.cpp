@@ -6,11 +6,9 @@
 #include "screencapture.h"
 #include "ocrwrapper.h"
 
-#ifdef DEBUG_MOD
 #include "debuginfodrawer.h"
 
 #include <chrono>
-#endif
 
 #include <string>
 
@@ -21,9 +19,16 @@
 
 EngagementEstimator::EngagementEstimator(QObject *parent)
     : QThread(parent)
-    //, m_faceTracker("./")
     , m_faceTracker(std::filesystem::current_path() / "test_output")
 {
+}
+
+void EngagementEstimator::setOutputDirectory(const QString& outputDir) {
+    if (outputDir.size() == 0) {
+        qDebug() << "Warning! The output directory wasn't passed to the app. Using current direcotry.";
+        return;
+    }
+    m_faceTracker.setOutputDir(outputDir.toStdString());
 }
 
 void EngagementEstimator::run()
@@ -37,24 +42,25 @@ void EngagementEstimator::run()
         try {
             auto timePoint = std::chrono::system_clock::now();
             ResultInfo resultInfo;
-#ifdef DEBUG_MOD
-            auto start = std::chrono::high_resolution_clock::now();
-#endif
+            std::chrono::time_point<std::chrono::high_resolution_clock> start, startMeasure;
+            double emotions_double = 0;
+            double faceid_double = 0;
+            if (m_debugMod) {
+                start = std::chrono::high_resolution_clock::now();
+            }
             MTCNNWrapper detector;
             //OCRWrapper ocr;
             auto screenPixmap = ScreenCapture::capture(m_x, m_y, m_width, m_height);
             const int coef = std::max(screenPixmap.width() / m_width, screenPixmap.height() / m_height);
-#ifdef DEBUG_MOD
-            auto startMeasure = std::chrono::high_resolution_clock::now();
-#endif
+            if (m_debugMod) {
+                startMeasure = std::chrono::high_resolution_clock::now();
+            }
             auto faces = detector.detect(screenPixmap);
-#ifdef DEBUG_MOD
-            auto endMeasure = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
-            resultInfo.inferTime["detector"] = ms_double.count();
-            double emotions_double = 0;
-            double faceid_double = 0;
-#endif
+            if (m_debugMod) {
+                auto endMeasure = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
+                resultInfo.inferTime["detector"] = ms_double.count();
+            }
             //ocr.Init();
 
             ModelExecutor executor, faceIDExecutor;
@@ -62,44 +68,44 @@ void EngagementEstimator::run()
             faceIDExecutor.loadModel(FaceID::getModelPath());
             for (auto& face : faces) {
                 QPixmap f = screenPixmap.copy(face.bbox.x1, face.bbox.y1, face.bbox.x2 - face.bbox.x1, face.bbox.y2 - face.bbox.y1);
-#ifdef DEBUG_MOD
-                startMeasure = std::chrono::high_resolution_clock::now();
-#endif
+                if (m_debugMod) {
+                    startMeasure = std::chrono::high_resolution_clock::now();
+                }
                 auto input = EnetB08BestAfewWrapper::getInputTensor(f);
                 auto output = EnetB08BestAfewWrapper::getOutputTensor();
                 executor.run(input, output);
                 auto emotion = EnetB08BestAfewWrapper::classifyEmition(output);
-#ifdef DEBUG_MOD
-                endMeasure = std::chrono::high_resolution_clock::now();
-                ms_double = endMeasure - startMeasure;
-                emotions_double += ms_double.count();
-#endif
+                if (m_debugMod) {
+                    auto endMeasure = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
+                    emotions_double += ms_double.count();
+                }
                 //auto id = ocr.getTextFromImg(f);
-#ifdef DEBUG_MOD
-                startMeasure = std::chrono::high_resolution_clock::now();
-#endif
+                if (m_debugMod) {
+                    startMeasure = std::chrono::high_resolution_clock::now();
+                }
                 input = FaceID::getInputTensor(f);
                 output = FaceID::getOutputTensor();
                 faceIDExecutor.run(input, output);
                 auto visualEmbeddings = FaceID::getFaceIDFeatures(output);
-#ifdef DEBUG_MOD
-                endMeasure = std::chrono::high_resolution_clock::now();
-                ms_double = endMeasure - startMeasure;
-                faceid_double += ms_double.count();
-#endif
+                if (m_debugMod) {
+                    auto endMeasure = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
+                    faceid_double += ms_double.count();
+                }
                 resultInfo.faces.push_back({emotion.c_str(), visualEmbeddings, f, face.bbox.x1/coef, face.bbox.y1/coef,
                                            face.bbox.x2/coef, face.bbox.y2/coef, timePoint});
                 qDebug() << "Result emotion: " << emotion.c_str() << ", text: ";
             }
             m_faceTracker.trackFaces(resultInfo);
-#ifdef DEBUG_MOD
-            auto end = std::chrono::high_resolution_clock::now();
-            ms_double = end - start;
-            resultInfo.inferTime["all"] = ms_double.count();
-            resultInfo.inferTime["emotions"] = emotions_double;
-            resultInfo.inferTime["face_id"] = faceid_double;
-            emit result(resultInfo);
-#endif
+            if (m_debugMod) {
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> ms_double = end - start;
+                resultInfo.inferTime["all"] = ms_double.count();
+                resultInfo.inferTime["emotions"] = emotions_double;
+                resultInfo.inferTime["face_id"] = faceid_double;
+                emit result(resultInfo);
+            }
             qDebug() << "Result size: " << faces.size();
         } catch (std::exception& e) {
             emit error(e.what());

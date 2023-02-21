@@ -36,11 +36,6 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
-#ifdef DEBUG_MOD
-    engine.rootContext()->setContextProperty("DEBUG_MOD", QVariant(true));
-#else
-    engine.rootContext()->setContextProperty("DEBUG_MOD", QVariant(false));
-#endif // DEBUG_MOD
     engine.load(url);
 
     return app.exec();

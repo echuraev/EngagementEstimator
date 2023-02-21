@@ -7,7 +7,6 @@ DebugInfoDrawer::DebugInfoDrawer()
 
 }
 
-#ifdef DEBUG_MOD
 void DebugInfoDrawer::paint(QPainter *painter)
 {
     painter->save();
@@ -49,8 +48,4 @@ void DebugInfoDrawer::recvResults(const ResultInfo& resultInfo)
     m_resultInfo = resultInfo;
     update();
 }
-#else
-void DebugInfoDrawer::paint(QPainter *painter)
-{
-}
-#endif // DEBUG_MOD
+

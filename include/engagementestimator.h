@@ -14,12 +14,18 @@ class EngagementEstimator : public QThread
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(bool running READ running);
+    Q_PROPERTY(bool debugMod WRITE setDebugMod);
+    Q_PROPERTY(QString outputDirectory WRITE setOutputDirectory);
 public:
     explicit EngagementEstimator(QObject *parent = nullptr);
     void run();
     inline bool running() const {
         return m_running;
     }
+    inline void setDebugMod(bool debugMod) {
+        m_debugMod = debugMod;
+    }
+    void setOutputDirectory(const QString& outputDir);
 
 public slots:
     void setFrameCoordinates(int x, int y, int width, int height);
@@ -27,7 +33,7 @@ public slots:
 
 signals:
     void error(const QString& msg);
-    // Currently we use signal result only in DEBUG_MOD.
+    // Currently we use signal result only in debug mod.
     // Probably something will be changed in the future
     void result(const ResultInfo& resultInfo);
 
@@ -42,6 +48,7 @@ private:
     int m_width;
     int m_height;
     bool m_running = false;
+    bool m_debugMod = false;
 };
 
 #endif // ENGAGEMENTESTIMATOR_H

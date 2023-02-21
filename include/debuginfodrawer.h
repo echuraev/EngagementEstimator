@@ -15,14 +15,12 @@ public:
 
     void paint(QPainter *painter) final;
 
-#ifdef DEBUG_MOD
 public slots:
     void recvResults(const ResultInfo& resultInfo);
 
 private:
     ResultInfo m_resultInfo;
     uint borderMargin = 20;
-#endif // DEBUG_MOD
 };
 
 #endif // DEBUGINFODRAWER_H

@@ -39,7 +39,7 @@ Window {
             errorDialog.open()
         }
         onResult: function(faces) {
-            if (DEBUG_MOD) {
+            if (Config.debugMod) {
                 debugInfoDrawer.recvResults(faces)
             } else {
                 console.log("WARNING!!! Signal onResult was sent from EngagementEstimator in non debug mode!")
@@ -88,9 +88,11 @@ Window {
                     text = qsTr("Start capturing")
                 } else {
                     screenAreaSelectorWindows.movable = false
+                    engagementEstimator.debugMod = Config.debugMod;
+                    engagementEstimator.outputDirectory = outputPath.text;
                     engagementEstimator.setFrameCoordinates(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
                                                              screenAreaSelectorWindows.width, screenAreaSelectorWindows.height);
-                    if (!DEBUG_MOD) {
+                    if (!Config.debugMod) {
                         screenAreaSelectorWindows.visible = false
                     }
                     text = qsTr("Stop capturing")

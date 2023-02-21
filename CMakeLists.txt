@@ -21,8 +21,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Widgets Lingui
 
 set(TS_FILES ${PROJECT_NAME}_ru_RU.ts)
 
-add_definitions(-DDEBUG_MOD)
-
 file(GLOB src_files
     "src/*.cpp"
 )

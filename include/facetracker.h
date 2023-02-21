@@ -18,7 +18,7 @@ public:
     FaceTracker(const std::filesystem::path& outputDir);
     void trackFaces(ResultInfo& resultInfo);
     inline void setLogFileName(const QString& logFileName) { m_logFileName = logFileName; }
-    //inline void setOutputDir(const QString& outputDir) { m_outputDir = outputDir; }
+    inline void setOutputDir(const std::filesystem::path& outputDir) { m_outputDir = outputDir; }
 
 private:
     bool openLogFile();

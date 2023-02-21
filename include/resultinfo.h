@@ -23,9 +23,7 @@ struct FaceInfo {
 
 struct ResultInfo {
     QVector<FaceInfo> faces;
-#ifdef DEBUG_MOD
     std::unordered_map<std::string, double> inferTime = {};
-#endif // DEBUG_MOD
 };
 
 #endif // RESULTINFO_H

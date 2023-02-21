@@ -5,7 +5,7 @@ import Qt.labs.platform
 
 Window {
     id: mainWindow
-    width: 300
+    width: 400
     height: 100
     visible: true
     maximumHeight: height
@@ -23,10 +23,10 @@ Window {
                 id: outputPath
                 placeholderText: qsTr("Select output directory...")
                 readOnly: true
-                width: 230
+                width: 300
             }
             Button {
-                width: 70
+                width: 100
                 //height: Style.height
                 //width: Style.widthMedium
                 //background: StyleRectangle { anchors.fill: parent }
@@ -56,8 +56,7 @@ Window {
                 id: debugMod
                 text: qsTr("Use debug mode")
                 checked: true
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("For now it is just a placeholer and compilation flag is used. Bun in the future it should be fixed.")
+                onCheckedChanged: Config.debugMod = checked
             }
         }
 
@@ -72,7 +71,7 @@ Window {
                 text: qsTr("Select area")
                 font.pixelSize: Style.fontSize
                 onClicked: {
-                    if (DEBUG_MOD) {
+                    if (Config.debugMod) {
                         console.log("WARNING!!!")
                         console.log("You run application in debug mode")
                         console.log("WARNING!!!")
