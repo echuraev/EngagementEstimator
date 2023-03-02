@@ -36,9 +36,8 @@ set(PROJECT_SOURCES
 )
 
 find_package(OpenCV REQUIRED)
-find_package(Tesseract REQUIRED)
 
-set(MTCNN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/opencv-mtcnn/lib")
+set(MTCNN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/opencv-mtcnn")
 add_subdirectory("${MTCNN_PATH}")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -80,12 +79,12 @@ include_directories(
     "${TVM_BUILD_DIR}/../include"
     "${TVM_BUILD_DIR}/../3rdparty/dmlc-core/include/"
     "${TVM_BUILD_DIR}/../3rdparty/dlpack/include"
-    "${MTCNN_LIB_INCLUDE_PATH}"
-    "${Tesseract_INCLUDE_DIR}"
     "${OpenCV_INCLUDE_DIRS}"
+    "3rd_party/opencv-mtcnn/lib/include"
 )
 
 find_library(LIB_TVM NAMES tvm_runtime PATHS ${TVM_BUILD_DIR})
+#find_library(LIB_MTCNN NAMES mtcnn PATHS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 target_compile_definitions(${PROJECT_NAME}
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
@@ -96,7 +95,6 @@ target_link_libraries(${PROJECT_NAME}
   Qt${QT_VERSION_MAJOR}::Widgets
   ${LIB_TVM}
   ${OpenCV_LIBS}
-  ${Tesseract_LIBRARY}
   mtcnn
 )
 

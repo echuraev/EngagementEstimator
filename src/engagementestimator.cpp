@@ -4,7 +4,6 @@
 #include "mtcnnwrapper.h"
 #include "modelexecutor.h"
 #include "screencapture.h"
-#include "ocrwrapper.h"
 
 #include "debuginfodrawer.h"
 
