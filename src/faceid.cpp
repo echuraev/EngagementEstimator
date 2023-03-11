@@ -68,5 +68,5 @@ std::vector<float> FaceID::getFaceIDFeatures(const tvm::runtime::NDArray& output
 
 std::string FaceID::getModelPath()
 {
-    return "resources/models/state_vggface2_enet0_new.so";
+    return "resources/models/state_vggface2_enet0_new.tuned.so";
 }
