@@ -41,3 +41,17 @@ Brief guide:
 2. Specify `TVM_BUILD_DIR`. This variable should contain path to directory with `libtvm_runtime`. 
    Go to: `Projects` menu, in section `Build Environment` click on the `Add` button.
 3. Click on the `Run` button and the build process will be started. After finishing, the application will run.
+
+## Research papers
+
+[Article](https://www.sciencedirect.com/science/article/pii/S2665963823000441) in Software Impacts:
+```BibTex
+@article{churaev2023standalone,
+  title={A standalone software for real-time facial analysis in online conferences and e-lessons},
+  author={Churaev, Egor and Savchenko, Andrey V},
+  journal={Software Impacts},
+  pages={100507},
+  year={2023},
+  publisher={Elsevier}
+}
+```
