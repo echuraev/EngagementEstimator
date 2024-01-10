@@ -7,7 +7,7 @@ The research materials are located in the folder [research](research/). Also,
 this repository contains desktop C++ application written in Qt.
 
 ## Research materials
-In [User-independent engagement.ipynb](research/User-independant engagement.ipynb),
+In [User-independent engagement.ipynb](research/User-independant%20engagement.ipynb),
 the results related to the research of engagement estimation are presented.
 
 ### Engagement dataset
