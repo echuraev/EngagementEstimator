@@ -1,13 +1,36 @@
 # EngagementEstimator
 
-## Requirements
+This repository contains materials for research related to facial expression
+recognition and engagement prediction based on video. 
+
+The research materials are located in the folder [research](research/). Also,
+this repository contains desktop C++ application written in Qt.
+
+## Research materials
+In [User-independent engagement.ipynb](research/User-independant engagement.ipynb),
+the results related to the research of engagement estimation are presented.
+
+### Engagement dataset
+To estimate the efficiency of the user-adapted approach, we collected a small
+engagement dataset from online lectures. Examples of frames from this dataset
+are presented below. The videos in the dataset include 5 persons and videos were
+recorded in different orientations. In total 160 videos were recorded, 80 videos
+per class (distracted and engaged), and 16 videos for each person. The length of
+each video is 4--6 seconds.
+
+![Examples of frames from our dataset](research/our_dataset.png)
+
+This dataset can be downloaded from Google Drive: https://drive.google.com/drive/folders/1e5_H8FSYhpioTb_u_AgEaMKDiXhcqR5t?usp=sharing
+
+## C++ application
+### Requirements
 - C++17
 - CMake >= 3.14
 - OpenCV
 - Apache TVM
 - Qt
 
-## Building Apache TVM
+### Building Apache TVM
 Full documentation you can find [here](https://tvm.apache.org/docs/install/index.html).
 
 Brief guide:
@@ -32,7 +55,7 @@ Brief guide:
    make -j4 tvm_runtime
    ```
 
-## Building
+### Building
 0. Update and initialize submodules:
    ```
    $ git submodule update --init --recursive
