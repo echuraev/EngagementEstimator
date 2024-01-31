@@ -84,7 +84,7 @@ include_directories(
 )
 
 find_library(LIB_TVM NAMES tvm_runtime PATHS ${TVM_BUILD_DIR})
-#find_library(LIB_MTCNN NAMES mtcnn PATHS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+find_library(LIB_MTCNN NAMES mtcnn PATHS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 target_compile_definitions(${PROJECT_NAME}
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
@@ -98,9 +98,8 @@ target_link_libraries(${PROJECT_NAME}
   mtcnn
 )
 
-# TODO: Update MACOSX_BUNDLE_GUI_IDENTIFIER and check that screen capturer works
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_GUI_IDENTIFIER engagement_estimator.hse.ru
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
