@@ -23,6 +23,7 @@ set(TS_FILES ${PROJECT_NAME}_ru_RU.ts)
 
 file(GLOB src_files
     "src/*.cpp"
+    "src/*/*.cpp"
 )
 
 FILE(GLOB_RECURSE headers "include/*.h")

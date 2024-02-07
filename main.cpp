@@ -6,8 +6,8 @@
 #include <QQuickView>
 #include <QQmlContext>
 
-#include "engagementestimator.h"
-#include "debuginfodrawer.h"
+#include "engagement_estimator.h"
+#include "ui/debug_info_drawer.h"
 
 int main(int argc, char *argv[])
 {
