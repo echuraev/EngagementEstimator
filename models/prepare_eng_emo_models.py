@@ -33,6 +33,17 @@ def open_pytorch_model(path):
     shape_list = [(input_name, inp.shape)]
 
     mod, params = relay.frontend.from_pytorch(trace, shape_list)
+    seq = tvm.transform.Sequential(
+        [
+            transform.InferType(),
+            transform.FoldConstant(),
+        ]
+    )
+
+    mod = seq(mod)
+    print('*' * 50)
+    print(mod)
+    print('*' * 50)
     return mod, params
 
 
@@ -105,5 +116,5 @@ if __name__ == '__main__':
     modelAtn, shape_dict = single_attention_model(2, "./weights/enet_b0_8_best_afew.pt_single_attention_independent_bin_class_best.h5", SAMPLES)
     mod, params = open_keras_model(modelAtn, shape_dict)
     lib = build_model(mod, params)
-    lib_name = "single_attention_emotions_classifier.so"
+    lib_name = "single_attention_engagement_classifier.so"
     lib.export_library(lib_name)

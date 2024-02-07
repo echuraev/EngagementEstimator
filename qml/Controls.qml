@@ -25,6 +25,10 @@ Window {
         title: "Error!";
 
         onAccepted: {
+            // TODO: Enable closing windows and openning main window
+            //mainWindow.visible = true
+            //screenAreaSelectorWindows.close()
+            //controlsWindow.close();
             errorDialog.close();
         }
     }
@@ -32,9 +36,7 @@ Window {
     EngagementEstimator {
         id: engagementEstimator
         onError: function(msg) {
-            mainWindow.visible = true
-            screenAreaSelectorWindows.close()
-            controlsWindow.close();
+            console.log("EngagementEstimator Error!!! " + msg)
             errorDialog.text = msg
             errorDialog.open()
         }

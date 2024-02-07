@@ -17,6 +17,11 @@ def open_pytorch_model(path):
 
     model = torch.load(path, map_location=torch.device('cpu'))
     model.eval()
+    #last_layer=torch.nn.Sequential(model.classifier[0],torch.nn.Softmax(dim=1))
+    #inp = torch.randn(20, 1280).to(device)
+    #f=last_layer.forward(inp)
+    ##print(f.shape,f,f.sum(axis=1))
+    model.classifier = torch.nn.Identity()
     input_shape = [1, 3, 224, 224]
     inp = torch.rand(input_shape)
 
@@ -30,9 +35,6 @@ def open_pytorch_model(path):
         shape_list = [(input_name, inp.shape)]
 
         mod, params = relay.frontend.from_pytorch(trace, shape_list)
-        print('-' * 50)
-        print(trace)
-        print('-' * 50)
 
     with tvm.transform.PassContext(opt_level=3):
         if params:
@@ -55,9 +57,9 @@ def open_pytorch_model(path):
 
 if __name__ == '__main__':
     lib = open_pytorch_model(model)
-    lib_name = model_name + ".so"
-    path_dso = lib_name
-    lib.export_library(path_dso)
+    #lib_name = model_name + ".so"
+    #path_dso = lib_name
+    #lib.export_library(path_dso)
 
 
 
