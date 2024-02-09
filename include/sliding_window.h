@@ -20,7 +20,7 @@ public:
 
 private:
     const static int m_windowWidth = 120;
-    std::unordered_map<int64_t, std::vector<tvm::runtime::NDArray>> m_windowMap;
+    std::unordered_map<int64_t, std::vector<std::vector<float>>> m_windowMap;
     std::unordered_map<int64_t, size_t> m_windowMapIdx;
 };
 

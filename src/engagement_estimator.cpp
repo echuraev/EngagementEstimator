@@ -53,6 +53,7 @@ void EngagementEstimator::run()
             double faceid_double = 0;
             double emotions_double = 0;
             double engagement_double = 0;
+            double concat_double = 0;
             if (m_debugMod) {
                 start = std::chrono::high_resolution_clock::now();
             }
@@ -62,7 +63,6 @@ void EngagementEstimator::run()
             file.open(QIODevice::WriteOnly);
             screenPixmap.save(&file, "PNG");*/
             const int coef = std::max(screenPixmap.width() / m_width, screenPixmap.height() / m_height);
-            qDebug() << "Here 112342";
             if (m_debugMod) {
                 startMeasure = std::chrono::high_resolution_clock::now();
             }
@@ -73,8 +73,8 @@ void EngagementEstimator::run()
                 resultInfo.inferTime["detector"] = ms_double.count();
             }
 
-            featuresExtractor.loadModel(extractor.getModelPath());
-            faceIDExecutor.loadModel(faceId.getModelPath());
+            m_featuresExtractor.loadModel(extractor.getModelPath());
+            m_faceIDExecutor.loadModel(faceId.getModelPath());
             for (auto& face : faces) {
                 QPixmap f = screenPixmap.copy(face.bbox.x1, face.bbox.y1, face.bbox.x2 - face.bbox.x1, face.bbox.y2 - face.bbox.y1);
                 if (m_debugMod) {
@@ -82,7 +82,7 @@ void EngagementEstimator::run()
                 }
                 auto input = extractor.getInputTensor(f);
                 auto faceEngEmoFeatures = extractor.getOutputTensor();
-                featuresExtractor.run(input, faceEngEmoFeatures);
+                m_featuresExtractor.run(input, faceEngEmoFeatures);
                 if (m_debugMod) {
                     auto endMeasure = std::chrono::high_resolution_clock::now();
                     std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
@@ -93,7 +93,7 @@ void EngagementEstimator::run()
                 }
                 input = faceId.getInputTensor(f);
                 auto output = faceId.getOutputTensor();
-                faceIDExecutor.run(input, output);
+                m_faceIDExecutor.run(input, output);
                 auto faceIdFeatures = faceId.getFaceIDFeatures(output);
                 if (m_debugMod) {
                     auto endMeasure = std::chrono::high_resolution_clock::now();
@@ -105,12 +105,28 @@ void EngagementEstimator::run()
                 //qDebug() << "Result emotion: " << emotion.c_str() << ", text: ";
             }
             m_faceTracker.trackFaces(resultInfo);
-            emotionsExecutor.loadModel(emoClassifier.getModelPath());
-            engagementExecutor.loadModel(engClassifier.getModelPath());
+            m_emotionsExecutor.loadModel(emoClassifier.getModelPath());
+            m_engagementExecutor.loadModel(engClassifier.getModelPath());
             for (auto& f : resultInfo.faces) {
+                m_slidingWindow.AddFeatureVector(f.id, f.faceEngEmoFeatures);
+                if (!m_slidingWindow.IsReady(f.id)) {
+                    continue;
+                }
                 if (m_debugMod) {
                     startMeasure = std::chrono::high_resolution_clock::now();
                 }
+                auto inputSequence = m_slidingWindow.GetSequence(f.id);
+                if (m_debugMod) {
+                    auto endMeasure = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
+                    concat_double += ms_double.count();
+                }
+                if (m_debugMod) {
+                    startMeasure = std::chrono::high_resolution_clock::now();
+                }
+                auto output = emoClassifier.getOutputTensor();
+                m_emotionsExecutor.run(inputSequence, output);
+                f.emotionLabel = emoClassifier.classifyEmition(output).c_str();
                 if (m_debugMod) {
                     auto endMeasure = std::chrono::high_resolution_clock::now();
                     std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
@@ -119,6 +135,9 @@ void EngagementEstimator::run()
                 if (m_debugMod) {
                     startMeasure = std::chrono::high_resolution_clock::now();
                 }
+                output = engClassifier.getOutputTensor();
+                m_engagementExecutor.run(inputSequence, output);
+                f.engagementLabel = engClassifier.classifyEngagement(output).c_str();
                 if (m_debugMod) {
                     auto endMeasure = std::chrono::high_resolution_clock::now();
                     std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
@@ -133,6 +152,7 @@ void EngagementEstimator::run()
                 resultInfo.inferTime["emotions"] = emotions_double;
                 resultInfo.inferTime["engagement"] = engagement_double;
                 resultInfo.inferTime["face_id"] = faceid_double;
+                resultInfo.inferTime["aggregation"] = concat_double;
                 emit result(resultInfo);
             }
             qDebug() << "Result size: " << faces.size();

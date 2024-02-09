@@ -93,6 +93,7 @@ void FaceTracker::trackFaces(ResultInfo& resultInfo)
             face.id = m_latestId;
             m_recentFeatures.push_back(features[i]);
         }
+        // TODO: Add dumping information
         //dumpInfo(face);
     }
     m_framesProcessed++;

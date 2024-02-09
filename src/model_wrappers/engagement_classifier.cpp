@@ -16,7 +16,7 @@ std::string EngagementClassifier::classifyEngagement(const tvm::runtime::NDArray
 {
     const std::vector<std::string> engagement = {"Distracted", "Engaged"};
     const float* oData = static_cast<float*>(output->data);
-    size_t maxIdx = std::distance(oData, std::max_element(oData, oData + 8));
+    size_t maxIdx = std::distance(oData, std::max_element(oData, oData + 2));
 
     return engagement[maxIdx];
 }

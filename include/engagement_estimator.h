@@ -9,6 +9,7 @@
 #include "face_tracker.h"
 #include "model_executor.h"
 #include "result_info.h"
+#include "sliding_window.h"
 
 class EngagementEstimator : public QThread
 {
@@ -51,10 +52,12 @@ private:
     bool m_running = false;
     bool m_debugMod = false;
 
-    ModelExecutor featuresExtractor;
-    ModelExecutor faceIDExecutor;
-    ModelExecutor emotionsExecutor;
-    ModelExecutor engagementExecutor;
+    ModelExecutor m_featuresExtractor;
+    ModelExecutor m_faceIDExecutor;
+    ModelExecutor m_emotionsExecutor;
+    ModelExecutor m_engagementExecutor;
+
+    SlidingWindow m_slidingWindow;
 };
 
 #endif // ENGAGEMENTESTIMATOR_H

@@ -22,6 +22,7 @@ void ModelExecutor::loadModel(std::string modelName)
     if (!QFile::exists(QString::fromStdString(modelName)))
         throw std::runtime_error("Cannot load model: " + modelName);
     m_module = tvm::runtime::Module::LoadFromFile(modelName);
+    m_modelLoaded = true;
 }
 
 void ModelExecutor::run(const tvm::runtime::NDArray& input, tvm::runtime::NDArray& output, DeviceType devType)
