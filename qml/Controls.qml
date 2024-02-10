@@ -53,6 +53,7 @@ Window {
     // Here you already need to use the position both along the X axis and the Y axis
     MouseArea {
         anchors.fill: parent
+        // TODO: Fix cursorShape for buttons
         cursorShape:  Qt.SizeAllCursor
 
         onPressed: {
@@ -87,9 +88,17 @@ Window {
                     engagementEstimator.stop()
                     screenAreaSelectorWindows.visible = true
                     screenAreaSelectorWindows.movable = true
+                    screenAreaSelectorWindows.maximumHeight = screenAreaSelectorWindows.maxHeight
+                    screenAreaSelectorWindows.maximumWidth = screenAreaSelectorWindows.maxWidth
+                    screenAreaSelectorWindows.minimumHeight = screenAreaSelectorWindows.minHeight
+                    screenAreaSelectorWindows.minimumWidth = screenAreaSelectorWindows.minWidth
                     text = qsTr("Start capturing")
                 } else {
                     screenAreaSelectorWindows.movable = false
+                    screenAreaSelectorWindows.maximumHeight = screenAreaSelectorWindows.height
+                    screenAreaSelectorWindows.maximumWidth = screenAreaSelectorWindows.width
+                    screenAreaSelectorWindows.minimumHeight = screenAreaSelectorWindows.height
+                    screenAreaSelectorWindows.minimumWidth = screenAreaSelectorWindows.width
                     engagementEstimator.debugMod = Config.debugMod;
                     engagementEstimator.outputDirectory = outputPath.text;
                     engagementEstimator.setFrameCoordinates(screenAreaSelectorWindows.x, screenAreaSelectorWindows.y,
