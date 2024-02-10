@@ -18,5 +18,7 @@ QPixmap ScreenCapture::capture(int x, int y, int width, int height)
     if (!screen) {
         throw std::runtime_error("Cannot get a QScreen for capturing");
     }
-    return screen->grabWindow(0, x, y, width, height);
+    auto res = screen->grabWindow(0, x, y, width, height).scaled(QSize(width, height));
+    res.setDevicePixelRatio(1);
+    return res;
 }

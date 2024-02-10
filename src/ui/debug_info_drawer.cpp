@@ -38,6 +38,7 @@ void DebugInfoDrawer::paint(QPainter *painter)
             text += QString::fromStdString(key) + ": " + QString::number(val) + " ms. ";
         }
         painter->drawText(QPointF(xPos, yPos), text);
+        qDebug() << text;
     }
 
     painter->restore();
