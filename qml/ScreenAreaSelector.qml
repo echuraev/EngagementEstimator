@@ -20,6 +20,8 @@ Window {
     readonly property int moveZoneSize: 5
     readonly property int minWidth: 200
     readonly property int minHeight: 200
+    readonly property int maxWidth: Screen.width
+    readonly property int maxHeight: Screen.height
     property bool movable: true
 
     Component.onCompleted: {
@@ -64,34 +66,6 @@ Window {
         }
         // We set the shape of the cursor so that it is clear that this resizing
         cursorShape: Qt.SizeFDiagCursor
-
-        onPressed: {
-            // We memorize the position along the Y axis
-            previousY = mouseY
-            previousX = mouseX
-        }
-
-        onMouseYChanged: {
-            if (movable) {
-                var dy = mouseY - previousY
-                screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
-                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
-            }
-        }
-
-        onMouseXChanged: {
-            if (movable) {
-                var dx = mouseX - previousX
-                screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
-                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     MouseArea {
@@ -104,34 +78,6 @@ Window {
         }
         // We set the shape of the cursor so that it is clear that this resizing
         cursorShape: Qt.SizeBDiagCursor
-
-        onPressed: {
-            // We memorize the position along the Y axis
-            previousY = mouseY
-            previousX = mouseX
-        }
-
-        // When changing a position, we recalculate the position of the window, and its height
-        onMouseYChanged: {
-            if (movable) {
-                var dy = mouseY - previousY
-                screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
-                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
-            }
-        }
-
-        onMouseXChanged: {
-            if (movable) {
-                var dx = mouseX - previousX
-                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     MouseArea {
@@ -144,33 +90,6 @@ Window {
         }
         // We set the shape of the cursor so that it is clear that this resizing
         cursorShape: Qt.SizeFDiagCursor
-
-        onPressed: {
-            // We memorize the position along the Y axis
-            previousY = mouseY
-            previousX = mouseX
-        }
-
-        // When changing a position, we recalculate the position of the window, and its height
-        onMouseYChanged: {
-            if (movable) {
-                var dy = mouseY - previousY
-                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
-            }
-        }
-
-        onMouseXChanged: {
-            if (movable) {
-                var dx = mouseX - previousX
-                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     MouseArea {
@@ -183,34 +102,6 @@ Window {
         }
         // We set the shape of the cursor so that it is clear that this resizing
         cursorShape: Qt.SizeBDiagCursor
-
-        onPressed: {
-            // We memorize the position along the Y axis
-            previousY = mouseY
-            previousX = mouseX
-        }
-
-        // When changing a position, we recalculate the position of the window, and its height
-        onMouseYChanged: {
-            if (movable) {
-                var dy = mouseY - previousY
-                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
-            }
-        }
-
-        onMouseXChanged: {
-            if (movable) {
-                var dx = mouseX - previousX
-                screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
-                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     MouseArea {
@@ -223,26 +114,6 @@ Window {
         }
         // We set the shape of the cursor so that it is clear that this resizing
         cursorShape: Qt.SizeVerCursor
-
-        onPressed: {
-            // We memorize the position along the Y axis
-            previousY = mouseY
-        }
-
-        // When changing a position, we recalculate the position of the window, and its height
-        onMouseYChanged: {
-            if (movable) {
-                var dy = mouseY - previousY
-                screenAreaSelectorWindows.setY(screenAreaSelectorWindows.y + dy)
-                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height - dy, minHeight))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     // Similar calculations for the remaining three areas of resize
@@ -255,23 +126,6 @@ Window {
             right: bottomRightCorner.left
         }
         cursorShape: Qt.SizeVerCursor
-
-        onPressed: {
-            previousY = mouseY
-        }
-
-        onMouseYChanged: {
-            if (movable) {
-                var dy = mouseY - previousY
-                screenAreaSelectorWindows.setHeight(Math.max(screenAreaSelectorWindows.height + dy, minHeight))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     MouseArea {
@@ -283,24 +137,6 @@ Window {
             left: parent.left
         }
         cursorShape: Qt.SizeHorCursor
-
-        onPressed: {
-            previousX = mouseX
-        }
-
-        onMouseXChanged: {
-            if (movable) {
-                var dx = mouseX - previousX
-                screenAreaSelectorWindows.setX(screenAreaSelectorWindows.x + dx)
-                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width - dx, minWidth))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     MouseArea {
@@ -312,23 +148,6 @@ Window {
             right: parent.right
         }
         cursorShape:  Qt.SizeHorCursor
-
-        onPressed: {
-            previousX = mouseX
-        }
-
-        onMouseXChanged: {
-            if (movable) {
-                var dx = mouseX - previousX
-                screenAreaSelectorWindows.setWidth(Math.max(screenAreaSelectorWindows.width + dx, minWidth))
-            }
-        }
-
-        onReleased: {
-            // Hack for creating controlWindow always on top
-            controlWindow.visible = false
-            controlWindow.visible = true
-        }
     }
 
     // The central area for moving the application window
@@ -348,7 +167,7 @@ Window {
         }
 
         onMouseXChanged: {
-            if (movable) {
+            if (screenAreaSelectorWindows.movable) {
                 var dx = mouseX - previousX
                 var new_x = Math.max(screenAreaSelectorWindows.x + dx, 0)
                 // TODO: do the same think for right border and for changing sizes
@@ -357,7 +176,7 @@ Window {
         }
 
         onMouseYChanged: {
-            if (movable) {
+            if (screenAreaSelectorWindows.movable) {
                 var dy = mouseY - previousY
                 var new_y = Math.max(screenAreaSelectorWindows.y + dy, 0)
                 screenAreaSelectorWindows.setY(new_y)
