@@ -58,6 +58,8 @@ private:
     ModelExecutor m_engagementExecutor;
 
     SlidingWindow m_slidingWindow;
+
+    const int m_detectorDownscaleWidth = 500;
 };
 
 #endif // ENGAGEMENTESTIMATOR_H
