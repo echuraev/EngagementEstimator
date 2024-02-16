@@ -35,7 +35,9 @@ void SlidingWindow::AddFeatureVector(int64_t faceId, const tvm::runtime::NDArray
     const float* fData = static_cast<float*>(features->data);
     std::vector<float> data(fData, fData + 1280);
     if (!IsKeyExists(faceId)) {
-        m_windowMap[faceId].resize(m_windowWidth, data);
+        //m_windowMap[faceId].resize(m_windowWidth, data);
+        m_windowMap[faceId].reserve(m_windowWidth);
+        m_windowMap[faceId].push_back(data);
         m_windowMapIdx[faceId] = 1;
         return;
     }

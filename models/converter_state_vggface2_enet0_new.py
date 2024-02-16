@@ -11,6 +11,7 @@ from tvm.relay.build_module import bind_params_by_name
 
 target = "llvm -mtriple=x86_64-apple-darwin20.1.0"
 model_name = "state_vggface2_enet0_new"
+BATCH = 10
 
 
 def open_faceid_model():
@@ -25,7 +26,7 @@ def open_faceid_model():
     model = model.to(device)
     print(model.eval())
     model.eval()
-    input_shape = [1, 3, 224, 224]
+    input_shape = [BATCH, 3, 224, 224]
     inp = torch.rand(input_shape)
 
     convert_to_relay = True

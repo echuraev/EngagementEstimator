@@ -14,7 +14,7 @@ tvm::runtime::NDArray EmotionClassifier::getOutputTensor()
 
 std::string EmotionClassifier::classifyEmition(const tvm::runtime::NDArray& output)
 {
-    const std::vector<std::string> emotions = {"Anger", "Contempt", "Disgust", "Fear", "Happiness", "Neutral", "Sadness", "Surprise"};
+    const std::vector<std::string> emotions = {"Neutral", "Calm", "Happy", "Sad", "Angry", "Fear", "Disgust", "Surprise"};
     const float* oData = static_cast<float*>(output->data);
     size_t maxIdx = std::distance(oData, std::max_element(oData, oData + 8));
 
