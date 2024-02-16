@@ -19,7 +19,7 @@ public:
     tvm::runtime::NDArray GetSequence(int64_t faceId);
 
 private:
-    const static int m_windowWidth = 120;
+    const static int m_windowWidth = 16;
     std::unordered_map<int64_t, std::vector<std::vector<float>>> m_windowMap;
     std::unordered_map<int64_t, size_t> m_windowMapIdx;
 };

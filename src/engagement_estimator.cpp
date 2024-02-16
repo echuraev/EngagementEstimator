@@ -47,8 +47,6 @@ void EngagementEstimator::run()
             auto timePoint = std::chrono::system_clock::now();
             ResultInfo resultInfo;
             std::chrono::time_point<std::chrono::high_resolution_clock> start, startMeasure;
-            double features_extracton_double = 0;
-            double faceid_double = 0;
             double emotions_double = 0;
             double engagement_double = 0;
             double concat_double = 0;
@@ -74,38 +72,85 @@ void EngagementEstimator::run()
             }
             m_featuresExtractor.loadModel(extractor.getModelPath());
             m_faceIDExecutor.loadModel(faceId.getModelPath());
+            m_emotionsExecutor.loadModel(emoClassifier.getModelPath());
+            m_engagementExecutor.loadModel(engClassifier.getModelPath());
+            if (m_debugMod) {
+                auto endMeasure = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> ms_double = endMeasure - startLoop;
+                resultInfo.inferTime["models_loading"] = ms_double.count();
+                startLoop = std::chrono::high_resolution_clock::now();
+            }
+
+            // Facial images extraction
+            if (m_debugMod) {
+                startLoop = std::chrono::high_resolution_clock::now();
+            }
+            std::vector<QPixmap> facialImages;
+            facialImages.reserve(faces.size());
             for (auto& face : faces) {
                 face.bbox.x1 *= downcastRatioW;
                 face.bbox.x2 *= downcastRatioW;
                 face.bbox.y1 *= downcastRatioH;
                 face.bbox.y2 *= downcastRatioH;
                 QPixmap f = screenPixmap.copy(face.bbox.x1, face.bbox.y1, face.bbox.x2 - face.bbox.x1, face.bbox.y2 - face.bbox.y1);
-                if (m_debugMod) {
-                    startMeasure = std::chrono::high_resolution_clock::now();
-                }
-                auto input = extractor.getInputTensor(f);
-                auto faceEngEmoFeatures = extractor.getOutputTensor();
-                m_featuresExtractor.run(input, faceEngEmoFeatures);
-                if (m_debugMod) {
-                    auto endMeasure = std::chrono::high_resolution_clock::now();
-                    std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
-                    features_extracton_double += ms_double.count();
-                }
-                if (m_debugMod) {
-                    startMeasure = std::chrono::high_resolution_clock::now();
-                }
-                input = faceId.getInputTensor(f);
-                auto output = faceId.getOutputTensor();
+                facialImages.push_back(f);
+            }
+            if (m_debugMod) {
+                auto endMeasure = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> ms_double = endMeasure - startLoop;
+                resultInfo.inferTime["faces_preparing"] = ms_double.count();
+                startLoop = std::chrono::high_resolution_clock::now();
+            }
+
+            // Facial features extraction
+            if (m_debugMod) {
+                startMeasure = std::chrono::high_resolution_clock::now();
+            }
+            auto inputs = extractor.getInputTensors(facialImages);
+            std::vector<tvm::runtime::NDArray> extractorOutputs;
+            auto output = extractor.getOutputTensor();
+            for (auto& input : inputs) {
+                m_featuresExtractor.run(input, output);
+                extractorOutputs.push_back(output);
+            }
+            auto extractedFeatures = ModelWrapperInterfaceCommon::divideBatchedFeaturesToTensors(extractorOutputs, faces.size());
+            if (m_debugMod) {
+                auto endMeasure = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
+                resultInfo.inferTime["features_extracton"] = ms_double.count();
+            }
+
+            // FaceID features extraction
+            if (m_debugMod) {
+                startMeasure = std::chrono::high_resolution_clock::now();
+            }
+            if (FeaturesExtractor::getBatchSize() != FaceID::getBatchSize()) {
+                inputs = faceId.getInputTensors(facialImages);
+            }
+            output = faceId.getOutputTensor();
+            std::vector<tvm::runtime::NDArray> faceIdOutputs;
+            for (auto& input : inputs) {
                 m_faceIDExecutor.run(input, output);
-                auto faceIdFeatures = faceId.getFaceIDFeatures(output);
-                if (m_debugMod) {
-                    auto endMeasure = std::chrono::high_resolution_clock::now();
-                    std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
-                    faceid_double += ms_double.count();
-                }
-                resultInfo.faces.push_back({faceIdFeatures, faceEngEmoFeatures, f, face.bbox.x1, face.bbox.y1,
-                                           face.bbox.x2, face.bbox.y2, timePoint});
-                //qDebug() << "Result emotion: " << emotion.c_str() << ", text: ";
+                faceIdOutputs.push_back(output);
+            }
+            auto faceIdFeatures = ModelWrapperInterfaceCommon::divideBatchedFeaturesToVec(faceIdOutputs, faces.size());
+            faceId.updateFaceIDFeatures(faceIdFeatures);
+            if (m_debugMod) {
+                auto endMeasure = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
+                resultInfo.inferTime["face_id"] = ms_double.count();
+            }
+
+            // Update results
+            for (size_t i = 0; i < faces.size(); ++i) {
+                resultInfo.faces.push_back({faceIdFeatures[i],
+                                            extractedFeatures[i],
+                                            facialImages[i],
+                                            faces[i].bbox.x1,
+                                            faces[i].bbox.y1,
+                                            faces[i].bbox.x2,
+                                            faces[i].bbox.y2,
+                                            timePoint});
             }
             if (m_debugMod) {
                 auto endMeasure = std::chrono::high_resolution_clock::now();
@@ -113,6 +158,8 @@ void EngagementEstimator::run()
                 resultInfo.inferTime["extractorLoop"] = ms_double.count();
                 startLoop = std::chrono::high_resolution_clock::now();
             }
+
+            // Track faces
             m_faceTracker.trackFaces(resultInfo);
             if (m_debugMod) {
                 auto endMeasure = std::chrono::high_resolution_clock::now();
@@ -120,8 +167,8 @@ void EngagementEstimator::run()
                 resultInfo.inferTime["tracker"] = ms_double.count();
                 startLoop = std::chrono::high_resolution_clock::now();
             }
-            m_emotionsExecutor.loadModel(emoClassifier.getModelPath());
-            m_engagementExecutor.loadModel(engClassifier.getModelPath());
+
+            // Classification
             for (auto& f : resultInfo.faces) {
                 m_slidingWindow.AddFeatureVector(f.id, f.faceEngEmoFeatures);
                 if (!m_slidingWindow.IsReady(f.id)) {
@@ -158,6 +205,7 @@ void EngagementEstimator::run()
                     std::chrono::duration<double, std::milli> ms_double = endMeasure - startMeasure;
                     engagement_double += ms_double.count();
                 }
+                qDebug() << "Id: " << f.id << ", Emo: " << f.emotionLabel << ", eng: " << f.engagementLabel;
             }
             if (m_debugMod) {
                 auto endMeasure = std::chrono::high_resolution_clock::now();
@@ -168,10 +216,8 @@ void EngagementEstimator::run()
                 auto end = std::chrono::high_resolution_clock::now();
                 std::chrono::duration<double, std::milli> ms_double = end - start;
                 resultInfo.inferTime["all"] = ms_double.count();
-                resultInfo.inferTime["features_extracton"] = features_extracton_double;
                 resultInfo.inferTime["emotions"] = emotions_double;
                 resultInfo.inferTime["engagement"] = engagement_double;
-                resultInfo.inferTime["face_id"] = faceid_double;
                 resultInfo.inferTime["aggregation"] = concat_double;
                 emit result(resultInfo);
             }

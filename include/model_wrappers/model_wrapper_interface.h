@@ -5,6 +5,17 @@
 #include <tvm/runtime/module.h>
 #define slots Q_SLOTS
 
+#include <vector>
+
+class QPixmap;
+
+namespace ModelWrapperInterfaceCommon
+{
+    std::vector<tvm::runtime::NDArray> prepareFacialImages(const std::vector<QPixmap>& inputs, size_t batchSize);
+    std::vector<std::vector<float>> divideBatchedFeaturesToVec(const std::vector<tvm::runtime::NDArray>& outputs, int64_t validOutputsNum);
+    std::vector<tvm::runtime::NDArray> divideBatchedFeaturesToTensors(const std::vector<tvm::runtime::NDArray>& outputs, int64_t validOutputsNum);
+}
+
 class ModelWrapperInterface
 {
 public:

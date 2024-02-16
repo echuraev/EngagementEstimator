@@ -11,7 +11,8 @@ target = "llvm -mtriple=x86_64-apple-darwin20.1.0"
 model_name = "enet_b0_8_best_afew"
 model = model_name + ".pt"
 extractor_log_file = "logs/enet_b0_8_best_afew.auto-scheduler.log"
-SAMPLES = 120
+SAMPLES = 16
+BATCH = 10
 
 def open_pytorch_model(path):
     torch.set_grad_enabled(False)
@@ -23,14 +24,15 @@ def open_pytorch_model(path):
     #f=last_layer.forward(inp)
     ##print(f.shape,f,f.sum(axis=1))
     model.classifier = torch.nn.Identity()
-    input_shape = [1, 3, 224, 224]
+    input_shape = [BATCH, 3, 224, 224]
     inp = torch.rand(input_shape)
 
     with torch.no_grad():
         trace = torch.jit.trace(model, inp)
 
     input_name = "input0"
-    shape_list = [(input_name, inp.shape)]
+    #input_shape = [relay.Any(), 3, 224, 224]
+    shape_list = [(input_name, input_shape)]
 
     mod, params = relay.frontend.from_pytorch(trace, shape_list)
     seq = tvm.transform.Sequential(
