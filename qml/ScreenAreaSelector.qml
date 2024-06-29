@@ -4,24 +4,23 @@ import ru.hse.debugInfoDrawer 1.0
 
 Window {
     id: screenAreaSelectorWindows
-    width: 1024
-    height: 768
+    width: Style.screenAreaWidth
+    height: Style.screenAreaHeight
     visible: true
     title: qsTr("Select area")
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint
-    // TODO: Find better color
-    //color: "#d390909d"
-    color: "#00000000"
+    color: Style.screenAreaColor
 
     // Declare properties that will store the position of the mouse cursor
     property int previousX
     property int previousY
     property var controlWindow
-    readonly property int moveZoneSize: 5
-    readonly property int minWidth: 200
-    readonly property int minHeight: 200
-    readonly property int maxWidth: Screen.width
-    readonly property int maxHeight: Screen.height
+    readonly property int moveZoneSize: Style.screenAreaMoveZoneSize
+    // The following properties are used in Controls.qml
+    readonly property int minWidth: Style.screenAreaMinWidth
+    readonly property int minHeight: Style.screenAreaMinHeight
+    readonly property int maxWidth: Style.screenAreaMaxWidth
+    readonly property int maxHeight: Style.screenAreaMaxHeight
     property bool movable: true
 
     Component.onCompleted: {
@@ -39,7 +38,7 @@ Window {
             var ctx = getContext("2d");
             ctx.lineWidth = 4;
             ctx.setLineDash([3]);
-            ctx.strokeStyle = "red"
+            ctx.strokeStyle = Style.screenAreaFrameColor
 
             ctx.beginPath();
             ctx.moveTo(0, 0);

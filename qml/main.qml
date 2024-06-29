@@ -1,12 +1,12 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
+import QtQuick 6.5
+import QtQuick.Window 6.5
+import QtQuick.Controls 6.5
 import Qt.labs.platform
 
 Window {
     id: mainWindow
-    width: 400
-    height: 100
+    width: Style.mainWindowWidth
+    height: Style.mainWindowHeight
     visible: true
     maximumHeight: height
     maximumWidth: width
@@ -18,22 +18,45 @@ Window {
         id: column
         anchors.fill: parent
 
+        Label {
+            text: qsTr("Select output directory:")
+            font.pixelSize: Style.fontSize
+            color: Style.textColor
+            padding: Style.blankSpace
+            width: parent.width
+        }
+
         Row {
+            width: parent.width
+
+            Label {
+                width: Style.blankSpace
+            }
             TextField {
                 id: outputPath
-                placeholderText: qsTr("Select output directory...")
+                text: folderDialog.folder
                 readOnly: true
-                width: 300
+                width: parent.width - (Style.buttonWidth + 3 * Style.blankSpace)
+                height: Style.elementHeight
+                font.pixelSize: Style.fontSize
+                color: Style.textColor
+            }
+            Label {
+                width: Style.blankSpace
             }
             Button {
-                width: 100
-                //height: Style.height
-                //width: Style.widthMedium
-                //background: StyleRectangle { anchors.fill: parent }
-                //onClicked: root.capturesVisible = !root.capturesVisible
+                id: browseButton
                 text: qsTr("Browse")
+                width: Style.buttonWidth
+                height: Style.elementHeight
                 font.pixelSize: Style.fontSize
+                // TODO: Enable color for button text
+                //color: Style.textColor
                 onClicked: folderDialog.open()
+                anchors.verticalCenter: outputPath.verticalCenter
+            }
+            Label {
+                width: Style.blankSpace
             }
 
             FolderDialog {
@@ -43,45 +66,43 @@ Window {
         }
 
         Row {
-            CheckBox {
-                text: qsTr("Enter path manually")
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("It is a bug in the latest MacOS. Dialog window is crashed. This option can be used to specify output path manually.")
-                onCheckedChanged: outputPath.readOnly = !checked
-            }
-        }
+            width: parent.width
 
-        Row {
+            Label {
+                width: Style.blankSpace
+            }
             CheckBox {
                 id: debugMod
                 text: qsTr("Use debug mode")
+                font.pixelSize: Style.fontSize
+                // TODO: Enable color for button text
+                //color: Style.textColor
                 checked: true
                 onCheckedChanged: Config.debugMod = checked
             }
         }
 
-        Row {
-            id: row1
-
-            Button {
-                //height: Style.height
-                //width: Style.widthMedium
-                //background: StyleRectangle { anchors.fill: parent }
-                //onClicked: root.capturesVisible = !root.capturesVisible
-                text: qsTr("Select area")
-                font.pixelSize: Style.fontSize
-                onClicked: {
-                    if (Config.debugMod) {
-                        console.log("WARNING!!!")
-                        console.log("You run application in debug mode")
-                        console.log("WARNING!!!")
-                    }
-                    var component = Qt.createComponent("ScreenAreaSelector.qml")
-                    var window = component.createObject(this)
-                    window.show()
-                    mainWindow.visible = false
+        Button {
+            //height: Style.height
+            //width: Style.widthMedium
+            //background: StyleRectangle { anchors.fill: parent }
+            //onClicked: root.capturesVisible = !root.capturesVisible
+            text: qsTr("Select area")
+            width: Style.buttonWidth
+            height: Style.elementHeight
+            font.pixelSize: Style.fontSize
+            onClicked: {
+                if (Config.debugMod) {
+                    console.log("WARNING!!!")
+                    console.log("You run application in debug mode")
+                    console.log("WARNING!!!")
                 }
+                var component = Qt.createComponent("ScreenAreaSelector.qml")
+                var window = component.createObject(this)
+                window.show()
+                mainWindow.visible = false
             }
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }

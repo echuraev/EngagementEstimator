@@ -8,14 +8,14 @@ import ru.hse.engagementEstimator 1.0
 
 Window {
     id: controlsWindow
-    width: 259
-    height: 30
+    width: Style.controlsWindowWidth
+    height: Style.controlsWindowHeight
     visible: true
     title: qsTr("Screen capture controls")
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint
     //flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground
-    x: (Screen.width - width) / 2
-    y: Screen.height - height - 50
+    x: Style.controlWindowPositionX
+    y: Style.controlWindowPositionY
 
     MessageDialog {
         id: errorDialog;
@@ -79,7 +79,8 @@ Window {
             anchors.left: parent.left
             anchors.leftMargin: 7
             //height: Style.height
-            width: 120
+            width: Style.controlsWindowButtonWidth
+            height: Style.elementHeight
             //background: StyleRectangle { anchors.fill: parent }
             text: qsTr("Start capturing")
             font.pixelSize: Style.fontSize
@@ -116,7 +117,8 @@ Window {
             id: closeButton
             anchors.right: parent.right
             anchors.rightMargin: 7
-            width: 120
+            width: Style.controlsWindowButtonWidth
+            height: Style.elementHeight
             //height: Style.height
             //width: Style.widthMedium
             //background: StyleRectangle { anchors.fill: parent }
